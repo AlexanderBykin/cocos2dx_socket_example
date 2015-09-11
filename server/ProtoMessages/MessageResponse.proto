@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+import "CommunicationMessageType.proto";
+
+option optimize_for = LITE_RUNTIME;
+option java_package = "ProtoMessages";
+option java_outer_classname = "MessageResponseBase";
+
+message MessageResponse {
+required eCommunicationMessageType messageType = 1 [default = cmtNone];
+required bytes messageBody = 2 [default = "\0"];
+required int32 errorCode = 3 [default = 0];
+}

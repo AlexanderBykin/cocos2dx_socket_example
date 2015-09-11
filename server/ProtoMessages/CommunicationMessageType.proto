@@ -1,0 +1,10 @@
+syntax = "proto2";
+option optimize_for = LITE_RUNTIME;
+option java_package = "ProtoMessages";
+option java_outer_classname = "CommunicationMessageTypeBase";
+
+enum eCommunicationMessageType {
+cmtNone = 0;
+cmtPing = 1; // simple message that send client to server
+cmtPong = 2; // simple message that send server to client
+}

@@ -1,0 +1,13 @@
+{
+    "ndk_module_path" :[
+        "/opt/cocos2dx",
+        "/opt/cocos2dx/cocos",
+        "/opt/cocos2dx/external"
+    ],
+    "copy_resources": [
+        {
+            "from": "../Resources",
+            "to": ""
+        }
+    ]
+}

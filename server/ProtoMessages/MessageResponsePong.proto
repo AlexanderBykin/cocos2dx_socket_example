@@ -1,0 +1,8 @@
+syntax = "proto2";
+option optimize_for = LITE_RUNTIME;
+option java_package = "ProtoMessages";
+option java_outer_classname = "MessageResponsePongBase";
+
+message MessageResponsePong {
+required string someText = 1  [default = ""];
+}

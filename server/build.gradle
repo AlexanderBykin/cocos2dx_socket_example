@@ -1,0 +1,24 @@
+apply plugin: 'java'
+apply plugin: 'scala'
+apply plugin: 'application'
+
+sourceCompatibility = 1.7
+version = '1.0'
+mainClassName = 'net.orionlab.sample.MainApp'
+
+ext {
+    scalaBinaryVersion = '2.11'
+    scalaVersion = scalaBinaryVersion + '.7'
+    akkaVersion = '2.3.11'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.0.0-alpha-4-pre', classifier: 'lite'
+    compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
+    compile group: 'com.typesafe.akka', name: 'akka-actor_' + scalaBinaryVersion, version: akkaVersion
+}
