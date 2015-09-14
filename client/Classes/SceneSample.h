@@ -26,11 +26,11 @@
 #include "cocos2d.h"
 #include "ProtoMessageDelegate.h"
 
-class SceneSample : public cocos2d::Layer, public ProtoMessageDelegate {
+class SceneSample : public cocos2d::LayerColor, public ProtoMessageDelegate {
 public:
     static cocos2d::Scene* scene();
     bool init();
-    void onProtoMessageReceive(MessageResponse &message);
+    void processProtoMessage(MessageResponse &message);
 private:
     void onMenuCallback(cocos2d::Ref *ref);
     // api calls

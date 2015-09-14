@@ -41,7 +41,7 @@ Scene* SceneSample::scene() {
 }
 
 bool SceneSample::init() {
-    if(!Layer::init()) {
+    if(!LayerColor::initWithColor(Color4B(0, 120, 0, 255))) {
         return false;
     }
     
@@ -58,19 +58,23 @@ void SceneSample::onMenuCallback(cocos2d::Ref *ref) {
 }
 
 void SceneSample::sendPing() {
+    this->removeChildByTag(10);
     MessageRequestPing msg;
     msg.set_sometext("request send from client");
     int ret = SocketThread::GetInstance()->getSocket().Send(this->wrapMessage(eCommunicationMessageType::cmtPing, msg));
     log("send ping message to server(%d)", ret);
 }
 
-void SceneSample::onProtoMessageReceive(MessageResponse &message) {
-    printf("response\n");
+void SceneSample::processProtoMessage(MessageResponse &message) {
     switch (message.messagetype()) {
         case eCommunicationMessageType::cmtPong: {
             if(!message.messagebody().empty()) {
                 MessageResponsePong msg;
                 msg.ParseFromString(message.messagebody());
+                auto image = Sprite::create("Close.png");
+                image->cocos2d::Node::setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+                image->setPosition(Vec2(200, 200));
+                this->addChild(image, 10, 10);
                 log("response from server '%s'", msg.sometext().c_str());
             } else {
                 log("Error: Received empty response body.");

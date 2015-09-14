@@ -21,3 +21,4 @@ proj.ios_mac/mac/Icon.icns
 *.bak
 gradlew
 gradlew.bat
+*.xccheckout

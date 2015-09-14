@@ -30,7 +30,24 @@
 
 class ProtoMessageDelegate {
 public:
-    virtual void onProtoMessageReceive(MessageResponse &message) = 0;
+    // simple method to enqueue proto messages
+    void enqueuProtoMessage() {
+        auto message = _protoMessageQueue.front();
+        _protoMessageQueue.pop();
+        processProtoMessage(message);
+    }
+    
+    // cocos2dx OpenGL is not thread safe, so we need to synchronize with cocos2dx thead
+    // put messages to queue and then enqueue with Scheduler
+    void onProtoMessageReceive(MessageResponse &message) {
+        _protoMessageQueue.push(message);
+        cocos2d::Director::getInstance()->getScheduler()->performFunctionInCocosThread(CC_CALLBACK_0(ProtoMessageDelegate::enqueuProtoMessage, this));
+    }
+    
+    // this method must be implemented in Every scene that uses communication with sockets
+    virtual void processProtoMessage(MessageResponse &message) = 0;
+    
+    // this method just wrap our message to MessageRequest to send it next to server
     const std::string wrapMessage(eCommunicationMessageType msgType, google::protobuf::MessageLite &msgBody) {
         MessageRequest msg;
         msg.set_messagetype(msgType);
@@ -39,6 +56,7 @@ public:
     }
 private:
     IMessageSerializer *_serializer = new BinarySerializer();
+    std::queue<MessageResponse> _protoMessageQueue;
 };
 
 #endif

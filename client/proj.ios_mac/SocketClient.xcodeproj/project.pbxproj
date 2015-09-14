@@ -50,6 +50,7 @@
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
 		9890A89E1B85FAC2005FEA7E /* libprotobuf-lite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9890A89D1B85FAC2005FEA7E /* libprotobuf-lite.a */; };
 		9890A8A11B85FB7D005FEA7E /* BinarySerializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9890A89F1B85FB7D005FEA7E /* BinarySerializer.cpp */; };
+		98B3E1481BA6FE8600AF5B5A /* Close.png in Resources */ = {isa = PBXBuildFile; fileRef = 98B3E1471BA6FE8600AF5B5A /* Close.png */; };
 		98B982611BA1D76900C94428 /* ODSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98B9825B1BA1D76900C94428 /* ODSocket.cpp */; };
 		98B982621BA1D76900C94428 /* SocketResponseThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98B9825D1BA1D76900C94428 /* SocketResponseThread.cpp */; };
 		98B982631BA1D76900C94428 /* SocketThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98B9825F1BA1D76900C94428 /* SocketThread.cpp */; };
@@ -148,6 +149,7 @@
 		9890A89D1B85FAC2005FEA7E /* libprotobuf-lite.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libprotobuf-lite.a"; path = "../../../../../../usr/local/lib/platform/i386-sim/lib/libprotobuf-lite.a"; sourceTree = "<group>"; };
 		9890A89F1B85FB7D005FEA7E /* BinarySerializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BinarySerializer.cpp; path = MessageSerializer/BinarySerializer.cpp; sourceTree = "<group>"; };
 		9890A8A01B85FB7D005FEA7E /* BinarySerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BinarySerializer.h; path = MessageSerializer/BinarySerializer.h; sourceTree = "<group>"; };
+		98B3E1471BA6FE8600AF5B5A /* Close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Close.png; sourceTree = "<group>"; };
 		98B9825B1BA1D76900C94428 /* ODSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ODSocket.cpp; sourceTree = "<group>"; };
 		98B9825C1BA1D76900C94428 /* ODSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODSocket.h; sourceTree = "<group>"; };
 		98B9825D1BA1D76900C94428 /* SocketResponseThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SocketResponseThread.cpp; sourceTree = "<group>"; };
@@ -294,6 +296,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				98B3E1471BA6FE8600AF5B5A /* Close.png */,
 			);
 			name = Resources;
 			path = ../Resources;
@@ -529,6 +532,7 @@
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,
 				521A8E6419F0C34300D177D7 /* Default-667h@2x.png in Resources */,
 				50EF629717ECD46A001EB2F8 /* Icon-58.png in Resources */,
+				98B3E1481BA6FE8600AF5B5A /* Close.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
