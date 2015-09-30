@@ -22,51 +22,49 @@
 
 package net.orionlab.sample.actors
 
+import com.google.protobuf.CodedInputStream
+
 object FrameBuilderActor {
 
   import akka.actor.{ActorLogging, Actor, Props}
-  import akka.util.ByteString
 
-  case class BuildFrame(data: ByteString)
+  case class BuildFrame(data: Array[Byte])
 
-  case class CompleteMessage(data: ByteString)
+  case class CompleteMessage(data: Array[Byte])
 
   def props(bufferSize: Int) = {
     Props(new FrameBuilderActor(bufferSize))
   }
 
   class FrameBuilderActor(bufferSize: Int) extends Actor with ActorLogging {
-    private val headerSize = 4
     private var messageLength = 0
-    private var messageBuffer = ByteString.empty
 
     def receive = {
       case BuildFrame(data) => parse(data)
     }
 
-    private def parse(data: ByteString) {
+    private def parse(data: Array[Byte]) {
       if (data.isEmpty) {
         messageLength = 0
-        messageBuffer = ByteString.empty
       } else {
+        val cis = CodedInputStream.newInstance(data)
         if (messageLength == 0) {
-          messageLength = data.iterator.getLongPart(headerSize)(java.nio.ByteOrder.LITTLE_ENDIAN).toInt
-          val newData = data.drop(headerSize)
-          messageBuffer = ByteString.empty
-          parse(newData)
-        } else {
-          val canTakeLen = if (data.length <= bufferSize) data.length else bufferSize
-          val needTakeLen = if (messageBuffer.length + canTakeLen > messageLength) messageBuffer.length + canTakeLen - messageLength else canTakeLen
-          messageBuffer ++= data.take(needTakeLen)
-          if (messageBuffer.length == messageLength) {
-            context.parent ! CompleteMessage(messageBuffer)
-            messageLength = 0
-          }
-          val newData = data.drop(needTakeLen)
-          parse(newData)
+          messageLength = cis.readRawLittleEndian32()
         }
+        parseBody(cis)
+      }
+    }
+
+    private def parseBody(cis: CodedInputStream): Unit = {
+      if (cis.getBytesUntilLimit >= messageLength) {
+        context.parent ! CompleteMessage(cis.readRawBytes(messageLength))
+      }
+      messageLength = 0
+      if (cis.getBytesUntilLimit > 0) {
+        self ! BuildFrame(cis.readRawBytes(cis.getBytesUntilLimit))
       }
     }
   }
 
 }
+

@@ -58,7 +58,7 @@ object SocketClientActor {
     def receive = {
       case Received(data) =>
         log.info("received request from client")
-        frameBuilder ! BuildFrame(data)
+        frameBuilder ! BuildFrame(data.toArray)
 
       case CompleteMessage(data) =>
         BinarySerializer.Deserialize(data.toArray) match {
