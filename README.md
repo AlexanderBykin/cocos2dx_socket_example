@@ -9,7 +9,7 @@ I create an online multiplayer game, but with network programming I have bad, lo
 3. download and install Gradle http://gradle.org/
 4. clone Cocos2dx https://github.com/cocos2d/cocos2d-x
 5. create liked directory of Cocos2dx to '/opt/cocos2dx'
-6. clone Protobuf https://github.com/google/protobuf
+6. clone Protobuf https://github.com/google/protobuf, the working commit is [7ecc19f] because latest have bug at Lite version of Java sources
 7. (optional) build Protobuf protoc compiler
 8. copy build-protobuf-iphonesim.sh into Protobuf directory and run it, this file builds static library of Protobuf, in my case it is plased to '/usr/local/lib/platform/x86_64-sim/lib/'
 9. create linked directory of Protobuf into '/opt/protobuf' 
