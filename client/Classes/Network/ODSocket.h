@@ -22,6 +22,7 @@
 	#include <sys/stat.h>
 	#include <sys/types.h>
 	#include <arpa/inet.h>
+    #include <string>
 	typedef int				SOCKET;
 
 	//#pragma region define win32 const variable in linux
@@ -41,7 +42,8 @@ public:
 
 	// Connect socket
 	bool Connect(const char* ip, unsigned short port);
-	//#region server
+	
+    #pragma region server
 	// Bind socket
 	bool Bind(unsigned short port);
 
@@ -50,8 +52,9 @@ public:
 
 	// Accept socket
 	bool Accept(ODSocket& s, char* fromip = NULL);
-	//#endregion
-	int Select();
+	#pragma endregion
+	
+    int Select();
 	// Send socket
 	int Send(const char* buf, int len, int flags = 0);
 
@@ -68,23 +71,24 @@ public:
 	// Get errno
 	int GetError();
 
-	//#pragma region just for win32
+	#pragma region just for win32
 	// Init winsock DLL
 	static int Init();
 	// Clean winsock DLL
 	static int Clean();
-	//#pragma endregion
+	#pragma endregion
 
 	// Domain parse
-	static bool DnsParse(const char* domain, char* ip);
+	static bool DnsParse(const char* domain);
 
 	ODSocket& operator = (SOCKET s);
 
 	operator SOCKET ();
 
 protected:
-	SOCKET m_sock;
-	fd_set  fdR;
+	SOCKET _sock;
+	fd_set _fdR;
+    bool _isConnected;
 };
 
 #endif

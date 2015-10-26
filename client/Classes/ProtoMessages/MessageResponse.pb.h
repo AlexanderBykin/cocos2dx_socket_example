@@ -50,11 +50,13 @@ class MessageResponse : public ::google::protobuf::MessageLite {
   }
 
   inline const ::std::string& unknown_fields() const {
-    return _unknown_fields_;
+    return _unknown_fields_.GetNoArena(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
 
   inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
+    return _unknown_fields_.MutableNoArena(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
 
   static const MessageResponse& default_instance();
@@ -147,7 +149,7 @@ class MessageResponse : public ::google::protobuf::MessageLite {
   // helper for ByteSize()
   int RequiredFieldsByteSizeFallback() const;
 
-  ::std::string _unknown_fields_;
+  ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
   ::google::protobuf::uint32 _has_bits_[1];

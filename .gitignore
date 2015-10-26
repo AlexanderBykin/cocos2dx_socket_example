@@ -22,3 +22,10 @@ proj.ios_mac/mac/Icon.icns
 gradlew
 gradlew.bat
 *.xccheckout
+client/cocos2d
+client/proj.android/libs
+client/proj.android/obj
+client/proj.android/assets
+client/proj.android/bin
+client/proj.android/gen
+client/bin

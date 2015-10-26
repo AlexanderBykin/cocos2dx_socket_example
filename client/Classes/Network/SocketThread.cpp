@@ -4,52 +4,70 @@
 
 #include "SocketThread.h"
 #include "SocketResponseThread.h"
+#include "cocos2d.h"
+
+SocketThread* _instance = nullptr;
+
+SocketThread* SocketThread::getInstance() {
+    if(_instance == nullptr) {
+        _instance = new SocketThread();
+    }
+    return _instance;
+}
 
 int SocketThread::start() {
 	int errCode = 0;
 	do {
 		pthread_attr_t tAttr;
 		errCode = pthread_attr_init(&tAttr);
-		assert(errCode == 0);
 		errCode = pthread_attr_setdetachstate(&tAttr, PTHREAD_CREATE_DETACHED);
 		if (errCode != 0) {
 			pthread_attr_destroy(&tAttr);
 			break;
 		}		
-		errCode = pthread_create(&pid, &tAttr, start_thread, this);
+		errCode = pthread_create(&_pid, &tAttr, start_thread, nullptr);
 	} while (0);
 	return errCode;
 } 
 
 void* SocketThread::start_thread(void *arg) {
-	SocketThread* thred = (SocketThread*)arg;
-	ODSocket cdSocket;
-	cdSocket.Init();	
-	bool isCreated = cdSocket.Create(AF_INET, SOCK_STREAM, 0);
-	bool isConnected = cdSocket.Connect("192.168.1.36", 15155);
-    thred->csocket = cdSocket;
+    auto thread = SocketThread::getInstance();
+	thread->setSocket(new ODSocket());
+	thread->getSocket()->Init();
+	bool isCreated = thread->getSocket()->Create(AF_INET, SOCK_STREAM, 0);
+    bool isConnected = thread->getSocket()->Connect("127.0.0.1", 15150);
 	if(isCreated && isConnected) {
-		thred->state = 0;
-		ResponseThread::GetInstance()->start();
+        thread->setSocketState(SocketState::ssInit);
+		ResponseThread::getInstance()->start();
 	} else {
-		thred->state = 1;
+		thread->setSocketState(SocketState::ssFailed);
 	}	
-	return NULL;
+	return nullptr;
 }
 
-ODSocket SocketThread::getSocket() {
-	return this->csocket;
+SocketThread::SocketState SocketThread::getSocketState() {
+    return _socketState;
 }
 
-SocketThread* SocketThread::m_pInstance = new SocketThread;
+void SocketThread::setSocketState(SocketState state) {
+    _socketState = state;
+}
 
-SocketThread* SocketThread::GetInstance() {
-	return m_pInstance;
+ODSocket* SocketThread::getSocket() {
+	return this->_socket;
+}
+
+void SocketThread::setSocket(ODSocket* socket) {
+    this->_socket = socket;
 }
 
 void SocketThread::stop() {
-	pthread_cancel(pid);
-	pthread_detach(pid); 
+#if CC_TARGET_PLATFORM && defined(ANDROID)
+    pthread_kill(_pid, SIGUSR1);
+#else
+	pthread_cancel(_pid);
+#endif
+    pthread_detach(_pid);
 }
 
 SocketThread::SocketThread(void) {
@@ -57,11 +75,11 @@ SocketThread::SocketThread(void) {
 }
 
 SocketThread::~SocketThread(void) {
-	if(m_pInstance != NULL) {
-		delete m_pInstance;
+	if(_instance != nullptr) {
+		delete _instance;
 	}
 }
 
 void SocketThread::setDelegate(SocketResponseThreadDelegate *delegate) {
-    ResponseThread::GetInstance()->setDelagate(delegate);
+    ResponseThread::getInstance()->setDelagate(delegate);
 }

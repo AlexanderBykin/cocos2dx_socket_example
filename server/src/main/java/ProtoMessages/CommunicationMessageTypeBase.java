@@ -74,8 +74,8 @@ public final class CommunicationMessageTypeBase {
         internalGetValueMap() {
       return internalValueMap;
     }
-    private static com.google.protobuf.Internal.EnumLiteMap<eCommunicationMessageType>
-        internalValueMap =
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+        eCommunicationMessageType> internalValueMap =
           new com.google.protobuf.Internal.EnumLiteMap<eCommunicationMessageType>() {
             public eCommunicationMessageType findValueByNumber(int number) {
               return eCommunicationMessageType.valueOf(number);

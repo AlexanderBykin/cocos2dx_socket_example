@@ -92,6 +92,8 @@ MessageResponse::MessageResponse(const MessageResponse& from)
 void MessageResponse::SharedCtor() {
   ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
+  _unknown_fields_.UnsafeSetDefault(
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   messagetype_ = 0;
   messagebody_.UnsafeSetDefault(_default_messagebody_);
   errorcode_ = 0;
@@ -104,6 +106,8 @@ MessageResponse::~MessageResponse() {
 }
 
 void MessageResponse::SharedDtor() {
+  _unknown_fields_.DestroyNoArena(
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   messagebody_.DestroyNoArena(_default_messagebody_);
   #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   if (this != &default_instance()) {
@@ -157,7 +161,8 @@ void MessageResponse::Clear() {
 #undef ZR_
 
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
-  mutable_unknown_fields()->clear();
+  _unknown_fields_.ClearToEmptyNoArena(
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 bool MessageResponse::MergePartialFromCodedStream(
@@ -366,7 +371,7 @@ void MessageResponse::InternalSwap(MessageResponse* other) {
   messagebody_.Swap(&other->messagebody_);
   std::swap(errorcode_, other->errorcode_);
   std::swap(_has_bits_[0], other->_has_bits_[0]);
-  _unknown_fields_.swap(other->_unknown_fields_);
+  _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 

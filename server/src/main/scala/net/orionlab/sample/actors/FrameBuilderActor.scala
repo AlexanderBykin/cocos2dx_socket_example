@@ -50,21 +50,20 @@ object FrameBuilderActor {
         val cis = CodedInputStream.newInstance(data)
         if (messageLength == 0) {
           messageLength = cis.readRawLittleEndian32()
+          //          log.info(s">>> Message(${data.map("%02X" format _).mkString(" ")})\n" +
+          //            s">>> MessageLength(${messageLength})\n" +
+          //            s">>> dataLenBefore(${data.length})\n" +
+          //            s">>> dataLenAfter(${cis.getBytesUntilLimit})")
         }
-        parseBody(cis)
-      }
-    }
-
-    private def parseBody(cis: CodedInputStream): Unit = {
-      if (cis.getBytesUntilLimit >= messageLength) {
-        context.parent ! CompleteMessage(cis.readRawBytes(messageLength))
-      }
-      messageLength = 0
-      if (cis.getBytesUntilLimit > 0) {
-        self ! BuildFrame(cis.readRawBytes(cis.getBytesUntilLimit))
+        if (cis.getBytesUntilLimit >= messageLength) {
+          context.parent ! CompleteMessage(cis.readRawBytes(messageLength))
+        }
+        messageLength = 0
+        if (cis.getBytesUntilLimit > 0) {
+          self ! BuildFrame(cis.readRawBytes(cis.getBytesUntilLimit))
+        }
       }
     }
   }
 
 }
-

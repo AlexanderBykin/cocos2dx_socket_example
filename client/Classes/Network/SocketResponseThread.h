@@ -5,27 +5,25 @@
 #ifndef __ResponseThread_H__
 #define __ResponseThread_H__
 
-#include "pthread.h"
+#include <pthread.h>
 #include "SocketResponseThreadDelegate.h"
 
-class ResponseThread
-{
+class ResponseThread {
 public:	
 	~ResponseThread(void);
-	static ResponseThread* GetInstance();
+	static ResponseThread* getInstance();
 	int start (void* = NULL);
 	void stop();
 	void sleep (int tesec);
 	void detach();
-	void * wait();
+	void* wait();
     void setDelagate(SocketResponseThreadDelegate *delegate);
 private:
 	ResponseThread(void);
-	pthread_t handle; 
+	pthread_t _handle;
 	bool started;
 	bool detached;
-	static void * threadFunc(void *);
-	static ResponseThread* m_pInstance;
+	static void* threadFunc(void *);
     SocketResponseThreadDelegate *_delegate;
 };
 

@@ -60,6 +60,7 @@
 		98BCCB8C1BA36BDA00CF575B /* MessageResponse.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 98BCCB831BA36BDA00CF575B /* MessageResponse.pb.cc */; };
 		98BCCB8D1BA36BDA00CF575B /* MessageResponsePong.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 98BCCB851BA36BDA00CF575B /* MessageResponsePong.pb.cc */; };
 		98BCCB8E1BA36BDA00CF575B /* SceneSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98BCCB871BA36BDA00CF575B /* SceneSample.cpp */; };
+		98D7D4961BDE44E900DE5D3F /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 98D7D4951BDE44E900DE5D3F /* libiconv.dylib */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
@@ -101,8 +102,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = /opt/cocos2dx/build/cocos2d_libs.xcodeproj; sourceTree = "<group>"; };
-		1ACB3243164770DE00914215 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = /opt/cocos2dx/platform/third_party/ios/libraries/libcurl.a; sourceTree = "<group>"; };
+		1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = ../cocos2d/build/cocos2d_libs.xcodeproj; sourceTree = "<group>"; };
+		1ACB3243164770DE00914215 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../cocos2d/platform/third_party/ios/libraries/libcurl.a; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* SocketClient iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SocketClient iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -170,6 +171,7 @@
 		98BCCB861BA36BDA00CF575B /* MessageResponsePong.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageResponsePong.pb.h; sourceTree = "<group>"; };
 		98BCCB871BA36BDA00CF575B /* SceneSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneSample.cpp; sourceTree = "<group>"; };
 		98BCCB881BA36BDA00CF575B /* SceneSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneSample.h; sourceTree = "<group>"; };
+		98D7D4951BDE44E900DE5D3F /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/usr/lib/libiconv.dylib; sourceTree = DEVELOPER_DIR; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -184,6 +186,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98D7D4961BDE44E900DE5D3F /* libiconv.dylib in Frameworks */,
 				9890A89E1B85FAC2005FEA7E /* libprotobuf-lite.a in Frameworks */,
 				52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */,
 				1AC6FB30180E99EB004C840B /* libcocos2d iOS.a in Frameworks */,
@@ -271,6 +274,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				98D7D4951BDE44E900DE5D3F /* libiconv.dylib */,
 				9890A89D1B85FAC2005FEA7E /* libprotobuf-lite.a */,
 				8262943D1AAF051F00CB7CF7 /* Security.framework */,
 				52B47A461A53D09B004E4C60 /* Security.framework */,
@@ -616,8 +620,8 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/opt/cocos2dx/cocos/platform/ios,
-					/opt/cocos2dx/cocos/platform/ios/Simulation,
+					../cocos2d/cocos/platform/ios,
+					../cocos2d/cocos/platform/ios/Simulation,
 				);
 				INFOPLIST_FILE = ios/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
@@ -659,8 +663,8 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/opt/cocos2dx/cocos/platform/ios,
-					/opt/cocos2dx/cocos/platform/ios/Simulation,
+					../cocos2d/cocos/platform/ios,
+					../cocos2d/cocos/platform/ios/Simulation,
 				);
 				INFOPLIST_FILE = ios/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
@@ -699,8 +703,8 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/opt/cocos2dx/cocos/platform/mac,
-					/opt/cocos2dx/external/glfw3/include/mac,
+					../cocos2d/cocos/platform/mac,
+					../cocos2d/external/glfw3/include/mac,
 				);
 				INFOPLIST_FILE = mac/Info.plist;
 				LIBRARY_SEARCH_PATHS = "";
@@ -731,8 +735,8 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/opt/cocos2dx/cocos/platform/mac,
-					/opt/cocos2dx/external/glfw3/include/mac,
+					../cocos2d/cocos/platform/mac,
+					../cocos2d/external/glfw3/include/mac,
 				);
 				INFOPLIST_FILE = mac/Info.plist;
 				LIBRARY_SEARCH_PATHS = "";
@@ -756,18 +760,18 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					/opt/cocos2dx,
-					/opt/cocos2dx/cocos,
-					/opt/cocos2dx/cocos/base,
-					/opt/cocos2dx/cocos/physics,
-					/opt/cocos2dx/cocos/math,
-					/opt/cocos2dx/cocos/2d,
-					/opt/cocos2dx/cocos/ui,
-					/opt/cocos2dx/cocos/network,
-					/opt/cocos2dx/cocos/audio/include,
-					"/opt/cocos2dx/cocos/editor-support",
-					/opt/cocos2dx/extensions,
-					/opt/cocos2dx/external,
-					/opt/cocos2dx/external/chipmunk/include/chipmunk,
+					../cocos2d/cocos,
+					../cocos2d/cocos/base,
+					../cocos2d/cocos/physics,
+					../cocos2d/cocos/math,
+					../cocos2d/cocos/2d,
+					../cocos2d/cocos/ui,
+					../cocos2d/cocos/network,
+					../cocos2d/cocos/audio/include,
+					"../cocos2d/cocos/editor-support",
+					../cocos2d/extensions,
+					../cocos2d/external,
+					../cocos2d/external/chipmunk/include/chipmunk,
 					"/usr/local/include/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
@@ -788,18 +792,18 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					/opt/cocos2dx,
-					/opt/cocos2dx/cocos,
-					/opt/cocos2dx/cocos/base,
-					/opt/cocos2dx/cocos/physics,
-					/opt/cocos2dx/cocos/math,
-					/opt/cocos2dx/cocos/2d,
-					/opt/cocos2dx/cocos/ui,
-					/opt/cocos2dx/cocos/network,
-					/opt/cocos2dx/cocos/audio/include,
-					"/opt/cocos2dx/cocos/editor-support",
-					/opt/cocos2dx/extensions,
-					/opt/cocos2dx/external,
-					/opt/cocos2dx/external/chipmunk/include/chipmunk,
+					../cocos2d/cocos,
+					../cocos2d/cocos/base,
+					../cocos2d/cocos/physics,
+					../cocos2d/cocos/math,
+					../cocos2d/cocos/2d,
+					../cocos2d/cocos/ui,
+					../cocos2d/cocos/network,
+					../cocos2d/cocos/audio/include,
+					"../cocos2d/cocos/editor-support",
+					../cocos2d/extensions,
+					../cocos2d/external,
+					../cocos2d/external/chipmunk/include/chipmunk,
 					"/usr/local/include/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;

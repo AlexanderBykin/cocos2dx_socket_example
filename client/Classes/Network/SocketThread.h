@@ -6,25 +6,31 @@
 #define __SocketThread_H__
 
 #include "ODSocket.h"
-#include "pthread.h"
 #include "SocketResponseThreadDelegate.h"
+#include <string>
+#include <pthread.h>
 
 class SocketThread {
-public:	
+public:
+    enum SocketState {
+        ssInit,
+        ssFailed
+    };
 	~SocketThread(void);
-	static SocketThread* GetInstance();
+	static SocketThread* getInstance();
 	int start();  
-	ODSocket getSocket();
-	int state;
+	ODSocket* getSocket();
+    void setSocket(ODSocket* socket);
+    SocketState getSocketState();
+    void setSocketState(SocketState state);
 	void stop();
     void setDelegate(SocketResponseThreadDelegate *delegate);
 private:
-	pthread_t pid;	
-	static void* start_thread(void *); 	
-	SocketThread(void);
-private:
-    ODSocket csocket;
-	static SocketThread* m_pInstance;
+    static void* start_thread(void *);
+	pthread_t _pid;
+    SocketState _socketState;
+    ODSocket *_socket;
+    SocketThread(void);
 };
 
 #endif

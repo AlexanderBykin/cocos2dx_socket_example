@@ -15,7 +15,7 @@
 #endif
 
 ODSocket::ODSocket(SOCKET sock) {
-	m_sock = sock;
+	_sock = sock;
 }
 
 ODSocket::~ODSocket() {
@@ -57,27 +57,30 @@ int ODSocket::Clean() {
 }
 
 ODSocket& ODSocket::operator =(SOCKET s) {
-	m_sock = s;
+	_sock = s;
 	return (*this);
 }
 
 ODSocket::operator SOCKET() {
-	return m_sock;
+	return _sock;
 }
 //create a socket object win/lin is the same
 // af:
 bool ODSocket::Create(int af, int type, int protocol) {
-	m_sock = socket(af, type, protocol);
-	return (m_sock != INVALID_SOCKET);
+	_sock = socket(af, type, protocol);
+	return (_sock != INVALID_SOCKET);
 }
 
-bool ODSocket::Connect(const char* ip, unsigned short port) {
+bool ODSocket::Connect(const char* hostname, unsigned short port) {
+    struct hostent *he;
 	struct sockaddr_in svraddr;
+    he = gethostbyname(hostname);
+    memcpy(&svraddr.sin_addr, he->h_addr_list[0], he->h_length);
 	svraddr.sin_family = AF_INET;
-	svraddr.sin_addr.s_addr = inet_addr(ip);
 	svraddr.sin_port = htons(port);
-	int ret = connect(m_sock, (struct sockaddr*) &svraddr, sizeof(svraddr));
-	return (ret != SOCKET_ERROR);
+	int ret = connect(_sock, (struct sockaddr*) &svraddr, sizeof(svraddr));
+    _isConnected = (ret != SOCKET_ERROR);
+    return _isConnected;
 }
 
 bool ODSocket::Bind(unsigned short port) {
@@ -87,22 +90,22 @@ bool ODSocket::Bind(unsigned short port) {
 	svraddr.sin_port = htons(port);
 
 	int opt = 1;
-	if (setsockopt(m_sock, SOL_SOCKET, SO_REUSEADDR, (char*) &opt, sizeof(opt))	< 0)
+	if (setsockopt(_sock, SOL_SOCKET, SO_REUSEADDR, (char*) &opt, sizeof(opt))	< 0)
         return false;
 
-	int ret = bind(m_sock, (struct sockaddr*) &svraddr, sizeof(svraddr));
+	int ret = bind(_sock, (struct sockaddr*) &svraddr, sizeof(svraddr));
 	return (ret != SOCKET_ERROR);
 }
 //for server
 bool ODSocket::Listen(int backlog) {
-	int ret = listen(m_sock, backlog);
+	int ret = listen(_sock, backlog);
 	return (ret != SOCKET_ERROR);
 }
 
 bool ODSocket::Accept(ODSocket& s, char* fromip) {
 	struct sockaddr_in cliaddr;
 	socklen_t addrlen = sizeof(cliaddr);
-	SOCKET sock = accept(m_sock, (struct sockaddr*) &cliaddr, &addrlen);
+	SOCKET sock = accept(_sock, (struct sockaddr*) &cliaddr, &addrlen);
 	if (sock == SOCKET_ERROR) {
 		return false;
 	}
@@ -115,20 +118,20 @@ bool ODSocket::Accept(ODSocket& s, char* fromip) {
 }
 
 int ODSocket::Select() {
-    if(m_sock == INVALID_SOCKET) {
+    if(_sock == INVALID_SOCKET) {
         return -1;
     }
     
-	FD_ZERO(&fdR);
-	FD_SET(m_sock, &fdR);
+	FD_ZERO(&_fdR);
+	FD_SET(_sock, &_fdR);
 	struct timeval mytimeout;
 	mytimeout.tv_sec = 3;
 	mytimeout.tv_usec = 0;
-	int result = select(m_sock + 1, &fdR, NULL, NULL, NULL);
+	int result = select(_sock + 1, &_fdR, NULL, NULL, NULL);
 	if(result == -1) {
 		return -1;
 	} else {
-		if(FD_ISSET(m_sock, &fdR)) {
+		if(FD_ISSET(_sock, &_fdR)) {
 			return -2;
 		} else {
 			return -3;
@@ -140,16 +143,18 @@ int ODSocket::Send(const char* buf, int len, int flags) {
     if(!isConnected()) {
         return 0;
     }
-
+    
     int bytes;
 	int count = 0;
 
 	while (count < len) {
-		bytes = send(m_sock, buf + count, len - count, flags);
+		bytes = send(_sock, buf + count, len - count, flags);
 		if (bytes == -1 || bytes == 0)
 			return -1;
 		count += bytes;
 	}
+
+    printf("SocketClient::Send(%d)\n", count);
 
 	return count;
 }
@@ -161,19 +166,21 @@ int ODSocket::Send(const std::string &data) {
 }
 
 int ODSocket::Recv(char* buf, int len, int flags) {
-	return recv(m_sock, buf, len, flags);
+	return recv(_sock, buf, len, flags);
 }
 
 bool ODSocket::isConnected() {
-    return m_sock != INVALID_SOCKET;
+    return _isConnected;
 }
 
 int ODSocket::Close() {
+    _isConnected = false;
 #ifdef WIN32
 	return closesocket(m_sock);
 #else
-	return close(m_sock);
+	return close(_sock);
 #endif
+    _sock = INVALID_SOCKET;
 }
 
 int ODSocket::GetError() {
@@ -184,15 +191,10 @@ int ODSocket::GetError() {
 #endif
 }
 
-bool ODSocket::DnsParse(const char* domain, char* ip) {
+bool ODSocket::DnsParse(const char* domain) {
 	struct hostent* p;
 	if ((p = gethostbyname(domain)) == NULL)
 		return false;
-
-	sprintf(ip, "%u.%u.%u.%u", (unsigned char) p->h_addr_list[0][0],
-			(unsigned char) p->h_addr_list[0][1],
-			(unsigned char) p->h_addr_list[0][2],
-			(unsigned char) p->h_addr_list[0][3]);
 
 	return true;
 }

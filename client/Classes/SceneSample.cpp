@@ -61,7 +61,7 @@ void SceneSample::sendPing() {
     this->removeChildByTag(10);
     MessageRequestPing msg;
     msg.set_sometext("request send from client");
-    int ret = SocketThread::GetInstance()->getSocket().Send(this->wrapMessage(eCommunicationMessageType::cmtPing, msg));
+    int ret = SocketThread::getInstance()->getSocket()->Send(this->wrapMessage(eCommunicationMessageType::cmtPing, msg));
     log("send ping message to server(%d)", ret);
 }
 

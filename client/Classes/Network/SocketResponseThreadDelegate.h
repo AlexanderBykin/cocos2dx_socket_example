@@ -20,8 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef _SocketResponseThreadDelegate_h_
-#define _SocketResponseThreadDelegate_h_
+#ifndef BrrClient_SocketResponseThreadDelegate_h
+#define BrrClient_SocketResponseThreadDelegate_h
+
+#include <string>
 
 class SocketResponseThreadDelegate {
 public:

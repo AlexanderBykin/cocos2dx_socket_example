@@ -187,54 +187,54 @@ public final class MessageRequestBase {
     public static ProtoMessages.MessageRequestBase.MessageRequest parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
+      return parser().parseFrom(data);
     }
     public static ProtoMessages.MessageRequestBase.MessageRequest parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
+      return parser().parseFrom(data, extensionRegistry);
     }
     public static ProtoMessages.MessageRequestBase.MessageRequest parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
+      return parser().parseFrom(data);
     }
     public static ProtoMessages.MessageRequestBase.MessageRequest parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
+      return parser().parseFrom(data, extensionRegistry);
     }
     public static ProtoMessages.MessageRequestBase.MessageRequest parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return parser().parseFrom(input);
     }
     public static ProtoMessages.MessageRequestBase.MessageRequest parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return parser().parseFrom(input, extensionRegistry);
     }
     public static ProtoMessages.MessageRequestBase.MessageRequest parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return parser().parseDelimitedFrom(input);
     }
     public static ProtoMessages.MessageRequestBase.MessageRequest parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return parser().parseDelimitedFrom(input, extensionRegistry);
     }
     public static ProtoMessages.MessageRequestBase.MessageRequest parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return parser().parseFrom(input);
     }
     public static ProtoMessages.MessageRequestBase.MessageRequest parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return parser().parseFrom(input, extensionRegistry);
     }
 
     public static Builder newBuilder() {
@@ -321,11 +321,11 @@ public final class MessageRequestBase {
     private byte memoizedIsInitialized = -1;
     protected final Object dynamicMethod(
         com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
-        Object... args) {
+        Object arg0, Object arg1) {
       switch (method) {
         case PARSE_PARTIAL_FROM: {
-          return new ProtoMessages.MessageRequestBase.MessageRequest(          (com.google.protobuf.CodedInputStream) args[0],
-              (com.google.protobuf.ExtensionRegistryLite) args[1]);
+          return new ProtoMessages.MessageRequestBase.MessageRequest(          (com.google.protobuf.CodedInputStream) arg0,
+              (com.google.protobuf.ExtensionRegistryLite) arg1);
         }
         case NEW_INSTANCE: {
           return new ProtoMessages.MessageRequestBase.MessageRequest(
@@ -338,7 +338,7 @@ public final class MessageRequestBase {
           if (isInitialized == 1) return DEFAULT_INSTANCE;
           if (isInitialized == 0) return null;
 
-          boolean shouldMemoize = ((Boolean) args[0]).booleanValue();
+          boolean shouldMemoize = ((Boolean) arg0).booleanValue();
           if (!hasMessageType()) {
             if (shouldMemoize) {
               memoizedIsInitialized = 0;
@@ -356,13 +356,14 @@ public final class MessageRequestBase {
 
         }
         case MAKE_IMMUTABLE: {
-          return null;}
+          return null;
+        }
         case NEW_BUILDER: {
-          return new Builder();}
+          return new Builder();
+        }
         case MERGE_FROM: {
-          Object arg = args[0];
-          if (arg == ProtoMessages.MessageRequestBase.MessageRequest.getDefaultInstance()) return this;
-          ProtoMessages.MessageRequestBase.MessageRequest other = (ProtoMessages.MessageRequestBase.MessageRequest) arg;
+          if (arg0 == ProtoMessages.MessageRequestBase.MessageRequest.getDefaultInstance()) return this;
+          ProtoMessages.MessageRequestBase.MessageRequest other = (ProtoMessages.MessageRequestBase.MessageRequest) arg0;
           if (other.hasMessageType()) {
             setMessageType(other.getMessageType());
           }
@@ -371,6 +372,18 @@ public final class MessageRequestBase {
           }
           this.mergeUnknownFields(other.unknownFields);
           return this;
+        }
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          if (PARSER == null) {    synchronized (ProtoMessages.MessageRequestBase.MessageRequest.class) {
+              if (PARSER == null) {
+                PARSER = new DefaultInstanceBasedParser(DEFAULT_INSTANCE);
+              }
+            }
+          }
+          return PARSER;
         }
       }
       throw new UnsupportedOperationException();
@@ -391,15 +404,11 @@ public final class MessageRequestBase {
       return DEFAULT_INSTANCE;
     }
 
-    public static final com.google.protobuf.Parser<MessageRequest> PARSER =
-        new DefaultInstanceBasedParser(DEFAULT_INSTANCE);
+    private static volatile com.google.protobuf.Parser<MessageRequest> PARSER;
 
-    static {
-      com.google.protobuf.GeneratedMessageLite.onLoad(
-          ProtoMessages.MessageRequestBase.MessageRequest.class, new com.google.protobuf.GeneratedMessageLite
-              .PrototypeHolder<ProtoMessages.MessageRequestBase.MessageRequest, Builder>(
-                  DEFAULT_INSTANCE, PARSER));}
-
+    public static com.google.protobuf.Parser<MessageRequest> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
   }
 
 

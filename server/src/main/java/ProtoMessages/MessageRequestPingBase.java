@@ -75,7 +75,7 @@ public final class MessageRequestPingBase {
     }
     private int bitField0_;
     public static final int SOMETEXT_FIELD_NUMBER = 1;
-    private java.lang.Object someText_;
+    private java.lang.String someText_;
     /**
      * <code>required string someText = 1 [default = ""];</code>
      */
@@ -86,34 +86,14 @@ public final class MessageRequestPingBase {
      * <code>required string someText = 1 [default = ""];</code>
      */
     public java.lang.String getSomeText() {
-      java.lang.Object ref = someText_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          someText_ = s;
-        }
-        return s;
-      }
+      return someText_;
     }
     /**
      * <code>required string someText = 1 [default = ""];</code>
      */
     public com.google.protobuf.ByteString
         getSomeTextBytes() {
-      java.lang.Object ref = someText_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        someText_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+      return com.google.protobuf.ByteString.copyFromUtf8(someText_);
     }
     /**
      * <code>required string someText = 1 [default = ""];</code>
@@ -142,13 +122,13 @@ public final class MessageRequestPingBase {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000001;
-      someText_ = value;
+      someText_ = value.toStringUtf8();
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getSomeTextBytes());
+        output.writeString(1, getSomeText());
       }
       unknownFields.writeTo(output);
     }
@@ -160,7 +140,7 @@ public final class MessageRequestPingBase {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getSomeTextBytes());
+          .computeStringSize(1, getSomeText());
       }
       size += unknownFields.getSerializedSize();
       memoizedSerializedSize = size;
@@ -171,54 +151,54 @@ public final class MessageRequestPingBase {
     public static ProtoMessages.MessageRequestPingBase.MessageRequestPing parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
+      return parser().parseFrom(data);
     }
     public static ProtoMessages.MessageRequestPingBase.MessageRequestPing parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
+      return parser().parseFrom(data, extensionRegistry);
     }
     public static ProtoMessages.MessageRequestPingBase.MessageRequestPing parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
+      return parser().parseFrom(data);
     }
     public static ProtoMessages.MessageRequestPingBase.MessageRequestPing parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
+      return parser().parseFrom(data, extensionRegistry);
     }
     public static ProtoMessages.MessageRequestPingBase.MessageRequestPing parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return parser().parseFrom(input);
     }
     public static ProtoMessages.MessageRequestPingBase.MessageRequestPing parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return parser().parseFrom(input, extensionRegistry);
     }
     public static ProtoMessages.MessageRequestPingBase.MessageRequestPing parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return parser().parseDelimitedFrom(input);
     }
     public static ProtoMessages.MessageRequestPingBase.MessageRequestPing parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return parser().parseDelimitedFrom(input, extensionRegistry);
     }
     public static ProtoMessages.MessageRequestPingBase.MessageRequestPing parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return parser().parseFrom(input);
     }
     public static ProtoMessages.MessageRequestPingBase.MessageRequestPing parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return parser().parseFrom(input, extensionRegistry);
     }
 
     public static Builder newBuilder() {
@@ -293,11 +273,11 @@ public final class MessageRequestPingBase {
     private byte memoizedIsInitialized = -1;
     protected final Object dynamicMethod(
         com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
-        Object... args) {
+        Object arg0, Object arg1) {
       switch (method) {
         case PARSE_PARTIAL_FROM: {
-          return new ProtoMessages.MessageRequestPingBase.MessageRequestPing(          (com.google.protobuf.CodedInputStream) args[0],
-              (com.google.protobuf.ExtensionRegistryLite) args[1]);
+          return new ProtoMessages.MessageRequestPingBase.MessageRequestPing(          (com.google.protobuf.CodedInputStream) arg0,
+              (com.google.protobuf.ExtensionRegistryLite) arg1);
         }
         case NEW_INSTANCE: {
           return new ProtoMessages.MessageRequestPingBase.MessageRequestPing(
@@ -310,7 +290,7 @@ public final class MessageRequestPingBase {
           if (isInitialized == 1) return DEFAULT_INSTANCE;
           if (isInitialized == 0) return null;
 
-          boolean shouldMemoize = ((Boolean) args[0]).booleanValue();
+          boolean shouldMemoize = ((Boolean) arg0).booleanValue();
           if (!hasSomeText()) {
             if (shouldMemoize) {
               memoizedIsInitialized = 0;
@@ -322,13 +302,14 @@ public final class MessageRequestPingBase {
 
         }
         case MAKE_IMMUTABLE: {
-          return null;}
+          return null;
+        }
         case NEW_BUILDER: {
-          return new Builder();}
+          return new Builder();
+        }
         case MERGE_FROM: {
-          Object arg = args[0];
-          if (arg == ProtoMessages.MessageRequestPingBase.MessageRequestPing.getDefaultInstance()) return this;
-          ProtoMessages.MessageRequestPingBase.MessageRequestPing other = (ProtoMessages.MessageRequestPingBase.MessageRequestPing) arg;
+          if (arg0 == ProtoMessages.MessageRequestPingBase.MessageRequestPing.getDefaultInstance()) return this;
+          ProtoMessages.MessageRequestPingBase.MessageRequestPing other = (ProtoMessages.MessageRequestPingBase.MessageRequestPing) arg0;
           if (other.hasSomeText()) {
             bitField0_ |= 0x00000001;
             someText_ = other.someText_;
@@ -336,6 +317,18 @@ public final class MessageRequestPingBase {
           }
           this.mergeUnknownFields(other.unknownFields);
           return this;
+        }
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          if (PARSER == null) {    synchronized (ProtoMessages.MessageRequestPingBase.MessageRequestPing.class) {
+              if (PARSER == null) {
+                PARSER = new DefaultInstanceBasedParser(DEFAULT_INSTANCE);
+              }
+            }
+          }
+          return PARSER;
         }
       }
       throw new UnsupportedOperationException();
@@ -356,15 +349,11 @@ public final class MessageRequestPingBase {
       return DEFAULT_INSTANCE;
     }
 
-    public static final com.google.protobuf.Parser<MessageRequestPing> PARSER =
-        new DefaultInstanceBasedParser(DEFAULT_INSTANCE);
+    private static volatile com.google.protobuf.Parser<MessageRequestPing> PARSER;
 
-    static {
-      com.google.protobuf.GeneratedMessageLite.onLoad(
-          ProtoMessages.MessageRequestPingBase.MessageRequestPing.class, new com.google.protobuf.GeneratedMessageLite
-              .PrototypeHolder<ProtoMessages.MessageRequestPingBase.MessageRequestPing, Builder>(
-                  DEFAULT_INSTANCE, PARSER));}
-
+    public static com.google.protobuf.Parser<MessageRequestPing> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
   }
 
 

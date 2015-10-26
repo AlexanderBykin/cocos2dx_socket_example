@@ -85,6 +85,8 @@ MessageRequestPing::MessageRequestPing(const MessageRequestPing& from)
 void MessageRequestPing::SharedCtor() {
   ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
+  _unknown_fields_.UnsafeSetDefault(
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sometext_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
@@ -95,6 +97,8 @@ MessageRequestPing::~MessageRequestPing() {
 }
 
 void MessageRequestPing::SharedDtor() {
+  _unknown_fields_.DestroyNoArena(
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sometext_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   if (this != &default_instance()) {
@@ -133,7 +137,8 @@ void MessageRequestPing::Clear() {
     sometext_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
-  mutable_unknown_fields()->clear();
+  _unknown_fields_.ClearToEmptyNoArena(
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 bool MessageRequestPing::MergePartialFromCodedStream(
@@ -250,7 +255,7 @@ void MessageRequestPing::Swap(MessageRequestPing* other) {
 void MessageRequestPing::InternalSwap(MessageRequestPing* other) {
   sometext_.Swap(&other->sometext_);
   std::swap(_has_bits_[0], other->_has_bits_[0]);
-  _unknown_fields_.swap(other->_unknown_fields_);
+  _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
