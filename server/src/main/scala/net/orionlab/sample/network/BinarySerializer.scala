@@ -33,7 +33,7 @@ object BinarySerializer extends IMessageSerializer {
     val result = new Array[Byte](message.getSerializedSize() + 4)
     try {
       val outStream = CodedOutputStream.newInstance(result)
-      outStream.writeRawLittleEndian32(message.getSerializedSize())
+      outStream.writeFixed32NoTag(message.getSerializedSize())
       message.writeTo(outStream)
     } catch {
       case ex: Exception => log.log(Level.SEVERE, "", ex)

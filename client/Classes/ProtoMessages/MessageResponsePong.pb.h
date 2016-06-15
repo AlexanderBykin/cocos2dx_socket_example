@@ -192,6 +192,7 @@ inline ::std::string* MessageResponsePong::mutable_sometext() {
   return sometext_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* MessageResponsePong::release_sometext() {
+  // @@protoc_insertion_point(field_release:MessageResponsePong.someText)
   clear_has_sometext();
   return sometext_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }

@@ -34,11 +34,9 @@
 class ODSocket {
 
 public:
-	ODSocket(SOCKET sock = INVALID_SOCKET);
-	~ODSocket();
-
-	// Create socket object for snd/recv data
-	bool Create(int af, int type, int protocol = 0);
+    // Create socket object for snd/recv data
+    ODSocket(int af, int type, int protocol = 0);
+    ~ODSocket();
 
 	// Connect socket
 	bool Connect(const char* ip, unsigned short port);
@@ -61,7 +59,7 @@ public:
     int Send(const std::string &data);
     
 	// Recv socket
-	int Recv(char* buf, int len, int flags = 0);
+	long Recv(char* buf, int len, int flags = 0);
 
     bool isConnected();
     
@@ -78,17 +76,16 @@ public:
 	static int Clean();
 	#pragma endregion
 
-	// Domain parse
-	static bool DnsParse(const char* domain);
+    bool hasInternetConnection(const char* host, int port);
 
 	ODSocket& operator = (SOCKET s);
 
 	operator SOCKET ();
 
 protected:
-	SOCKET _sock;
-	fd_set _fdR;
-    bool _isConnected;
+    SOCKET _sock;
+    fd_set _fdR;
+    bool _isConnected = false;
 };
 
 #endif

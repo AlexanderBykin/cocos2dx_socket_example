@@ -9,21 +9,21 @@
 #include "SocketResponseThreadDelegate.h"
 
 class ResponseThread {
-public:	
-	~ResponseThread(void);
-	static ResponseThread* getInstance();
-	int start (void* = NULL);
-	void stop();
-	void sleep (int tesec);
-	void detach();
-	void* wait();
+public:
+    ~ResponseThread(void);
+    static ResponseThread* getInstance();
+    int start (void* = NULL);
+    void stop();
+    void sleep (int tesec);
+    void detach();
+    void* wait();
     void setDelagate(SocketResponseThreadDelegate *delegate);
 private:
-	ResponseThread(void);
-	pthread_t _handle;
-	bool started;
-	bool detached;
-	static void* threadFunc(void *);
+    ResponseThread(void);
+    pthread_t _handle;
+    bool started;
+    bool detached;
+    static void* threadFunc(void *);
     SocketResponseThreadDelegate *_delegate;
 };
 

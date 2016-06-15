@@ -50,6 +50,10 @@ bool SceneSample::init() {
     menu->setPosition(Vec2(100, 100));
     this->addChild(menu);
     
+    if (!SocketThread::getInstance()->getSocket()->isConnected()) {
+        SocketThread::getInstance()->start();
+    }
+    
     return true;
 }
 

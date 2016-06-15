@@ -6,7 +6,7 @@
 #include "SocketThread.h"
 #include "cocos2d.h"
 
-static ResponseThread* _instance;
+static ResponseThread* _instance = nullptr;
 
 ResponseThread* ResponseThread::getInstance() {
     if(_instance == nullptr) {
@@ -47,7 +47,7 @@ void* ResponseThread::threadFunc(void *arg) {
             int selectRes = socket->Select();
             if(selectRes == -2) {
                 char recvBuf[4];
-                int recvLength = socket->Recv(recvBuf, 4, 0);
+                int recvLength = (int) socket->Recv(recvBuf, 4, 0);
                 if (recvLength == 4) {
                     char preBodyLength[4] = {recvBuf[0], recvBuf[1], recvBuf[2], recvBuf[3]};
                     int msgBodyLength = *(int*)&preBodyLength[0];

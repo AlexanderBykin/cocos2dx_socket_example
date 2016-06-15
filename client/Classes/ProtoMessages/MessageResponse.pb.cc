@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include <google/protobuf/stubs/common.h>
+#include <google/protobuf/stubs/port.h>
 #include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
@@ -65,12 +66,17 @@ static void MergeFromFail(int line) {
 
 // ===================================================================
 
+static ::std::string* MutableUnknownFieldsForMessageResponse(
+    MessageResponse* ptr) {
+  return ptr->mutable_unknown_fields();
+}
+
 ::std::string* MessageResponse::_default_messagebody_ = NULL;
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int MessageResponse::kMessageTypeFieldNumber;
 const int MessageResponse::kMessageBodyFieldNumber;
 const int MessageResponse::kErrorCodeFieldNumber;
-#endif  // !_MSC_VER
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 MessageResponse::MessageResponse()
   : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
@@ -142,8 +148,17 @@ MessageResponse* MessageResponse::New(::google::protobuf::Arena* arena) const {
 }
 
 void MessageResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:MessageResponse)
+#if defined(__clang__)
+#define ZR_HELPER_(f) \
+  _Pragma("clang diagnostic push") \
+  _Pragma("clang diagnostic ignored \"-Winvalid-offsetof\"") \
+  __builtin_offsetof(MessageResponse, f) \
+  _Pragma("clang diagnostic pop")
+#else
 #define ZR_HELPER_(f) reinterpret_cast<char*>(\
   &reinterpret_cast<MessageResponse*>(16)->f)
+#endif
 
 #define ZR_(first, last) do {\
   ::memset(&first, 0,\
@@ -167,12 +182,13 @@ void MessageResponse::Clear() {
 
 bool MessageResponse::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  ::google::protobuf::io::StringOutputStream unknown_fields_string(
-      mutable_unknown_fields());
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::internal::NewPermanentCallback(
+          &MutableUnknownFieldsForMessageResponse, this));
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
-      &unknown_fields_string);
+      &unknown_fields_string, false);
   // @@protoc_insertion_point(parse_start:MessageResponse)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
@@ -189,7 +205,7 @@ bool MessageResponse::MergePartialFromCodedStream(
           if (::eCommunicationMessageType_IsValid(value)) {
             set_messagetype(static_cast< ::eCommunicationMessageType >(value));
           } else {
-            unknown_fields_stream.WriteVarint32(tag);
+            unknown_fields_stream.WriteVarint32(8);
             unknown_fields_stream.WriteVarint32(value);
           }
         } else {
@@ -270,11 +286,12 @@ void MessageResponse::SerializeWithCachedSizes(
   }
 
   output->WriteRaw(unknown_fields().data(),
-                   unknown_fields().size());
+                   static_cast<int>(unknown_fields().size()));
   // @@protoc_insertion_point(serialize_end:MessageResponse)
 }
 
 int MessageResponse::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:MessageResponse)
   int total_size = 0;
 
   if (has_messagetype()) {
@@ -300,6 +317,7 @@ int MessageResponse::RequiredFieldsByteSizeFallback() const {
   return total_size;
 }
 int MessageResponse::ByteSize() const {
+// @@protoc_insertion_point(message_byte_size_start:MessageResponse)
   int total_size = 0;
 
   if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
@@ -334,6 +352,7 @@ void MessageResponse::CheckTypeAndMergeFrom(
 }
 
 void MessageResponse::MergeFrom(const MessageResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:MessageResponse)
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_messagetype()) {
@@ -347,10 +366,13 @@ void MessageResponse::MergeFrom(const MessageResponse& from) {
       set_errorcode(from.errorcode());
     }
   }
-  mutable_unknown_fields()->append(from.unknown_fields());
+  if (!from.unknown_fields().empty()) {
+    mutable_unknown_fields()->append(from.unknown_fields());
+  }
 }
 
 void MessageResponse::CopyFrom(const MessageResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:MessageResponse)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -447,6 +469,7 @@ void MessageResponse::clear_messagebody() {
   return messagebody_.MutableNoArena(_default_messagebody_);
 }
  ::std::string* MessageResponse::release_messagebody() {
+  // @@protoc_insertion_point(field_release:MessageResponse.messageBody)
   clear_has_messagebody();
   return messagebody_.ReleaseNoArena(_default_messagebody_);
 }

@@ -16,18 +16,18 @@ public:
         ssInit,
         ssFailed
     };
-	~SocketThread(void);
-	static SocketThread* getInstance();
-	int start();  
-	ODSocket* getSocket();
+    ~SocketThread(void);
+    static SocketThread* getInstance();
+    int start();
+    ODSocket* getSocket();
     void setSocket(ODSocket* socket);
     SocketState getSocketState();
     void setSocketState(SocketState state);
-	void stop();
+    void stop();
     void setDelegate(SocketResponseThreadDelegate *delegate);
 private:
     static void* start_thread(void *);
-	pthread_t _pid;
+    pthread_t _pid;
     SocketState _socketState;
     ODSocket *_socket;
     SocketThread(void);

@@ -192,6 +192,7 @@ inline ::std::string* MessageRequestPing::mutable_sometext() {
   return sometext_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* MessageRequestPing::release_sometext() {
+  // @@protoc_insertion_point(field_release:MessageRequestPing.someText)
   clear_has_sometext();
   return sometext_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }

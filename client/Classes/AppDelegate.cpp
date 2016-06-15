@@ -72,9 +72,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
     Director::getInstance()->runWithScene(SceneSample::scene());
     
-    auto socketThread = SocketThread::getInstance();
-    socketThread->start();
-    socketThread->setDelegate(this);
+    SocketThread::getInstance()->setDelegate(this);
     
     return true;
 }

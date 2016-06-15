@@ -31,8 +31,8 @@ trait IMessageSerializer {
   protected val log = Logger.getLogger(this.getClass.getName())
 
   // Serializer message to byte array.
-  def Serialize(message: MessageResponse): Array[Byte] = ???
+  def Serialize(message: MessageResponse): Array[Byte]
 
   // Deserializer message from byte array.
-  def Deserialize(serializedMessage: Array[Byte]): Option[MessageRequest] = ???
+  def Deserialize(serializedMessage: Array[Byte]): Option[MessageRequest]
 }

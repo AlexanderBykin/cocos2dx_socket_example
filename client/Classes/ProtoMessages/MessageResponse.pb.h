@@ -242,6 +242,7 @@ inline ::std::string* MessageResponse::mutable_messagebody() {
   return messagebody_.MutableNoArena(_default_messagebody_);
 }
 inline ::std::string* MessageResponse::release_messagebody() {
+  // @@protoc_insertion_point(field_release:MessageResponse.messageBody)
   clear_has_messagebody();
   return messagebody_.ReleaseNoArena(_default_messagebody_);
 }

@@ -16,23 +16,23 @@ public final class CommunicationMessageTypeBase {
     /**
      * <code>cmtNone = 0;</code>
      */
-    cmtNone(0, 0),
+    cmtNone(0),
     /**
-     * <code>cmtPing = 1;</code>
-     *
      * <pre>
      * simple message that send client to server
      * </pre>
-     */
-    cmtPing(1, 1),
-    /**
-     * <code>cmtPong = 2;</code>
      *
+     * <code>cmtPing = 1;</code>
+     */
+    cmtPing(1),
+    /**
      * <pre>
      * simple message that send server to client
      * </pre>
+     *
+     * <code>cmtPong = 2;</code>
      */
-    cmtPong(2, 2),
+    cmtPong(2),
     ;
 
     /**
@@ -40,19 +40,19 @@ public final class CommunicationMessageTypeBase {
      */
     public static final int cmtNone_VALUE = 0;
     /**
-     * <code>cmtPing = 1;</code>
-     *
      * <pre>
      * simple message that send client to server
      * </pre>
+     *
+     * <code>cmtPing = 1;</code>
      */
     public static final int cmtPing_VALUE = 1;
     /**
-     * <code>cmtPong = 2;</code>
-     *
      * <pre>
      * simple message that send server to client
      * </pre>
+     *
+     * <code>cmtPong = 2;</code>
      */
     public static final int cmtPong_VALUE = 2;
 
@@ -61,7 +61,15 @@ public final class CommunicationMessageTypeBase {
       return value;
     }
 
+    /**
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
     public static eCommunicationMessageType valueOf(int value) {
+      return forNumber(value);
+    }
+
+    public static eCommunicationMessageType forNumber(int value) {
       switch (value) {
         case 0: return cmtNone;
         case 1: return cmtPing;
@@ -78,13 +86,13 @@ public final class CommunicationMessageTypeBase {
         eCommunicationMessageType> internalValueMap =
           new com.google.protobuf.Internal.EnumLiteMap<eCommunicationMessageType>() {
             public eCommunicationMessageType findValueByNumber(int number) {
-              return eCommunicationMessageType.valueOf(number);
+              return eCommunicationMessageType.forNumber(number);
             }
           };
 
     private final int value;
 
-    private eCommunicationMessageType(int index, int value) {
+    private eCommunicationMessageType(int value) {
       this.value = value;
     }
 

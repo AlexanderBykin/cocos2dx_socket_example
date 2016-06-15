@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include <google/protobuf/stubs/common.h>
+#include <google/protobuf/stubs/port.h>
 #include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
@@ -61,9 +62,14 @@ static void MergeFromFail(int line) {
 
 // ===================================================================
 
-#ifndef _MSC_VER
+static ::std::string* MutableUnknownFieldsForMessageRequestPing(
+    MessageRequestPing* ptr) {
+  return ptr->mutable_unknown_fields();
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int MessageRequestPing::kSomeTextFieldNumber;
-#endif  // !_MSC_VER
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 MessageRequestPing::MessageRequestPing()
   : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
@@ -133,6 +139,7 @@ MessageRequestPing* MessageRequestPing::New(::google::protobuf::Arena* arena) co
 }
 
 void MessageRequestPing::Clear() {
+// @@protoc_insertion_point(message_clear_start:MessageRequestPing)
   if (has_sometext()) {
     sometext_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
@@ -143,12 +150,13 @@ void MessageRequestPing::Clear() {
 
 bool MessageRequestPing::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  ::google::protobuf::io::StringOutputStream unknown_fields_string(
-      mutable_unknown_fields());
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::internal::NewPermanentCallback(
+          &MutableUnknownFieldsForMessageRequestPing, this));
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
-      &unknown_fields_string);
+      &unknown_fields_string, false);
   // @@protoc_insertion_point(parse_start:MessageRequestPing)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
@@ -199,11 +207,12 @@ void MessageRequestPing::SerializeWithCachedSizes(
   }
 
   output->WriteRaw(unknown_fields().data(),
-                   unknown_fields().size());
+                   static_cast<int>(unknown_fields().size()));
   // @@protoc_insertion_point(serialize_end:MessageRequestPing)
 }
 
 int MessageRequestPing::ByteSize() const {
+// @@protoc_insertion_point(message_byte_size_start:MessageRequestPing)
   int total_size = 0;
 
   // required string someText = 1 [default = ""];
@@ -226,6 +235,7 @@ void MessageRequestPing::CheckTypeAndMergeFrom(
 }
 
 void MessageRequestPing::MergeFrom(const MessageRequestPing& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:MessageRequestPing)
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_sometext()) {
@@ -233,10 +243,13 @@ void MessageRequestPing::MergeFrom(const MessageRequestPing& from) {
       sometext_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sometext_);
     }
   }
-  mutable_unknown_fields()->append(from.unknown_fields());
+  if (!from.unknown_fields().empty()) {
+    mutable_unknown_fields()->append(from.unknown_fields());
+  }
 }
 
 void MessageRequestPing::CopyFrom(const MessageRequestPing& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:MessageRequestPing)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -306,6 +319,7 @@ void MessageRequestPing::clear_sometext() {
   return sometext_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
  ::std::string* MessageRequestPing::release_sometext() {
+  // @@protoc_insertion_point(field_release:MessageRequestPing.someText)
   clear_has_sometext();
   return sometext_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }

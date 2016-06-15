@@ -22,6 +22,8 @@
 
 package net.orionlab.sample
 
+import scala.concurrent.Await
+import scala.concurrent.duration._
 import akka.actor._
 import com.typesafe.config.ConfigFactory
 import net.orionlab.sample.actors._
@@ -30,5 +32,5 @@ object MainApp extends App {
   val config = ConfigFactory.load().getConfig("SocketServer")
   val system = ActorSystem("SocketServer", config)
   system.actorOf(SocketServerActor.props(config.getInt("ioServer.port")), "SocketServer")
-  system.awaitTermination()
+  Await.result(system.whenTerminated, Duration.Inf)
 }

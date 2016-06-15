@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include <google/protobuf/stubs/common.h>
+#include <google/protobuf/stubs/port.h>
 #include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
@@ -65,11 +66,16 @@ static void MergeFromFail(int line) {
 
 // ===================================================================
 
+static ::std::string* MutableUnknownFieldsForMessageRequest(
+    MessageRequest* ptr) {
+  return ptr->mutable_unknown_fields();
+}
+
 ::std::string* MessageRequest::_default_messagebody_ = NULL;
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int MessageRequest::kMessageTypeFieldNumber;
 const int MessageRequest::kMessageBodyFieldNumber;
-#endif  // !_MSC_VER
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 MessageRequest::MessageRequest()
   : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
@@ -140,6 +146,7 @@ MessageRequest* MessageRequest::New(::google::protobuf::Arena* arena) const {
 }
 
 void MessageRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:MessageRequest)
   if (_has_bits_[0 / 32] & 3u) {
     messagetype_ = 0;
     if (has_messagebody()) {
@@ -153,12 +160,13 @@ void MessageRequest::Clear() {
 
 bool MessageRequest::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  ::google::protobuf::io::StringOutputStream unknown_fields_string(
-      mutable_unknown_fields());
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::internal::NewPermanentCallback(
+          &MutableUnknownFieldsForMessageRequest, this));
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
-      &unknown_fields_string);
+      &unknown_fields_string, false);
   // @@protoc_insertion_point(parse_start:MessageRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
@@ -175,7 +183,7 @@ bool MessageRequest::MergePartialFromCodedStream(
           if (::eCommunicationMessageType_IsValid(value)) {
             set_messagetype(static_cast< ::eCommunicationMessageType >(value));
           } else {
-            unknown_fields_stream.WriteVarint32(tag);
+            unknown_fields_stream.WriteVarint32(8);
             unknown_fields_stream.WriteVarint32(value);
           }
         } else {
@@ -236,11 +244,12 @@ void MessageRequest::SerializeWithCachedSizes(
   }
 
   output->WriteRaw(unknown_fields().data(),
-                   unknown_fields().size());
+                   static_cast<int>(unknown_fields().size()));
   // @@protoc_insertion_point(serialize_end:MessageRequest)
 }
 
 int MessageRequest::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:MessageRequest)
   int total_size = 0;
 
   if (has_messagetype()) {
@@ -259,6 +268,7 @@ int MessageRequest::RequiredFieldsByteSizeFallback() const {
   return total_size;
 }
 int MessageRequest::ByteSize() const {
+// @@protoc_insertion_point(message_byte_size_start:MessageRequest)
   int total_size = 0;
 
   if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
@@ -288,6 +298,7 @@ void MessageRequest::CheckTypeAndMergeFrom(
 }
 
 void MessageRequest::MergeFrom(const MessageRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:MessageRequest)
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_messagetype()) {
@@ -298,10 +309,13 @@ void MessageRequest::MergeFrom(const MessageRequest& from) {
       messagebody_.AssignWithDefault(_default_messagebody_, from.messagebody_);
     }
   }
-  mutable_unknown_fields()->append(from.unknown_fields());
+  if (!from.unknown_fields().empty()) {
+    mutable_unknown_fields()->append(from.unknown_fields());
+  }
 }
 
 void MessageRequest::CopyFrom(const MessageRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:MessageRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -397,6 +411,7 @@ void MessageRequest::clear_messagebody() {
   return messagebody_.MutableNoArena(_default_messagebody_);
 }
  ::std::string* MessageRequest::release_messagebody() {
+  // @@protoc_insertion_point(field_release:MessageRequest.messageBody)
   clear_has_messagebody();
   return messagebody_.ReleaseNoArena(_default_messagebody_);
 }

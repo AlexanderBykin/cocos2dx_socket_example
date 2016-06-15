@@ -14,8 +14,10 @@
 #pragma comment(lib, "wsock32")
 #endif
 
-ODSocket::ODSocket(SOCKET sock) {
-	_sock = sock;
+// Create a socket object windows/unix is the same
+ODSocket::ODSocket(int af, int type, int protocol) {
+    _sock = INVALID_SOCKET;
+    _sock = socket(af, type, protocol);
 }
 
 ODSocket::~ODSocket() {
@@ -37,18 +39,19 @@ int ODSocket::Init() {
 	 }WSADATA, *LPWSADATA;
 	 */
 	WSADATA wsaData;
-	//#define MAKEWORD(a,b) ((WORD) (((BYTE) (a)) | ((WORD) ((BYTE) (b))) << 8))
+	// #define MAKEWORD(a,b) ((WORD) (((BYTE) (a)) | ((WORD) ((BYTE) (b))) << 8))
 	WORD version = MAKEWORD(2, 0);
 	int ret = WSAStartup(version, &wsaData); //win sock start up
 	if (ret) {
-//		cerr << "Initilize winsock error !" << endl;
+        // cerr << "Initilize winsock error !" << endl;
 		return -1;
 	}
 #endif
 
 	return 0;
 }
-//this is just for windows
+
+// This is just for windows
 int ODSocket::Clean() {
 #ifdef WIN32
 	return (WSACleanup());
@@ -64,25 +67,24 @@ ODSocket& ODSocket::operator =(SOCKET s) {
 ODSocket::operator SOCKET() {
 	return _sock;
 }
-//create a socket object win/lin is the same
-// af:
-bool ODSocket::Create(int af, int type, int protocol) {
-	_sock = socket(af, type, protocol);
-	return (_sock != INVALID_SOCKET);
-}
 
 bool ODSocket::Connect(const char* hostname, unsigned short port) {
-    struct hostent *he;
-	struct sockaddr_in svraddr;
-    he = gethostbyname(hostname);
-    memcpy(&svraddr.sin_addr, he->h_addr_list[0], he->h_length);
-	svraddr.sin_family = AF_INET;
-	svraddr.sin_port = htons(port);
-	int ret = connect(_sock, (struct sockaddr*) &svraddr, sizeof(svraddr));
-    _isConnected = (ret != SOCKET_ERROR);
+    //if (ODSocket::hasInternetConnection(hostname, (int)port)) {
+    if (_sock != INVALID_SOCKET) {
+        struct hostent *he;
+        struct sockaddr_in svraddr;
+        he = gethostbyname(hostname);
+        memcpy(&svraddr.sin_addr, he->h_addr_list[0], (size_t) he->h_length);
+        svraddr.sin_family = AF_INET;
+        svraddr.sin_port = htons(port);
+        int ret = connect(_sock, (struct sockaddr*) &svraddr, sizeof(svraddr));
+        he = nullptr;
+        _isConnected = (ret != SOCKET_ERROR);
+    }
     return _isConnected;
 }
 
+// For server
 bool ODSocket::Bind(unsigned short port) {
 	struct sockaddr_in svraddr;
 	svraddr.sin_family = AF_INET;
@@ -96,12 +98,14 @@ bool ODSocket::Bind(unsigned short port) {
 	int ret = bind(_sock, (struct sockaddr*) &svraddr, sizeof(svraddr));
 	return (ret != SOCKET_ERROR);
 }
-//for server
+
+// For server
 bool ODSocket::Listen(int backlog) {
 	int ret = listen(_sock, backlog);
 	return (ret != SOCKET_ERROR);
 }
 
+// For server
 bool ODSocket::Accept(ODSocket& s, char* fromip) {
 	struct sockaddr_in cliaddr;
 	socklen_t addrlen = sizeof(cliaddr);
@@ -122,21 +126,21 @@ int ODSocket::Select() {
         return -1;
     }
     
-	FD_ZERO(&_fdR);
-	FD_SET(_sock, &_fdR);
-	struct timeval mytimeout;
-	mytimeout.tv_sec = 3;
-	mytimeout.tv_usec = 0;
-	int result = select(_sock + 1, &_fdR, NULL, NULL, NULL);
-	if(result == -1) {
-		return -1;
-	} else {
-		if(FD_ISSET(_sock, &_fdR)) {
-			return -2;
-		} else {
-			return -3;
-		}
-	}
+    FD_ZERO(&_fdR);
+    FD_SET(_sock, &_fdR);
+    //	struct timeval mytimeout;
+    //	mytimeout.tv_sec = 3;
+    //	mytimeout.tv_usec = 0;
+    int result = select(_sock + 1, &_fdR, NULL, NULL, NULL);
+    if(result == -1) {
+        return -1;
+    } else {
+        if(FD_ISSET(_sock, &_fdR)) {
+            return -2;
+        } else {
+            return -3;
+        }
+    }
 }
 
 int ODSocket::Send(const char* buf, int len, int flags) {
@@ -144,29 +148,27 @@ int ODSocket::Send(const char* buf, int len, int flags) {
         return 0;
     }
     
-    int bytes;
-	int count = 0;
-
-	while (count < len) {
-		bytes = send(_sock, buf + count, len - count, flags);
-		if (bytes == -1 || bytes == 0)
-			return -1;
-		count += bytes;
-	}
-
-    printf("SocketClient::Send(%d)\n", count);
-
-	return count;
+    long bytes;
+    int count = 0;
+    
+    while (count < len) {
+        bytes = send(_sock, buf + count, (size_t) (len - count), flags);
+        if (bytes == -1 || bytes == 0)
+            return -1;
+        count += bytes;
+    }
+    
+    return count;
 }
 
 int ODSocket::Send(const std::string &data) {
-    int len = data.size();
+    long len = data.size();
     auto buf = data.c_str();
-    return this->Send(buf, len, 0);
+    return this->Send(buf, (int) len, 0);
 }
 
-int ODSocket::Recv(char* buf, int len, int flags) {
-	return recv(_sock, buf, len, flags);
+long ODSocket::Recv(char* buf, int len, int flags) {
+    return recv(_sock, buf, (size_t) len, flags);
 }
 
 bool ODSocket::isConnected() {
@@ -174,13 +176,14 @@ bool ODSocket::isConnected() {
 }
 
 int ODSocket::Close() {
+    int result = -1;
+    if (_sock != INVALID_SOCKET) {
+        shutdown(_sock, SHUT_RDWR);
+        result = close(_sock);
+        _sock = INVALID_SOCKET;
+    }
     _isConnected = false;
-#ifdef WIN32
-	return closesocket(m_sock);
-#else
-	return close(_sock);
-#endif
-    _sock = INVALID_SOCKET;
+    return result;
 }
 
 int ODSocket::GetError() {
@@ -191,10 +194,60 @@ int ODSocket::GetError() {
 #endif
 }
 
-bool ODSocket::DnsParse(const char* domain) {
-	struct hostent* p;
-	if ((p = gethostbyname(domain)) == NULL)
-		return false;
-
-	return true;
+bool ODSocket::hasInternetConnection(const char* host, int port) {
+    std::ostringstream strPort;
+    strPort << port;
+    
+    SOCKET ConnectSocket = INVALID_SOCKET;
+    struct addrinfo *result = NULL,
+    *ptr = NULL,
+    hints;
+    int iResult;
+    
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+    
+    // Resolve the server address and port
+    iResult = getaddrinfo(host, strPort.str().c_str(), &hints, &result);
+    if (iResult != 0) {
+        return false;
+    }
+    
+    // Attempt to connect to an address until one succeeds
+    for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {
+        // Create a SOCKET for connecting to server
+        ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
+                               ptr->ai_protocol);
+        if (ConnectSocket == INVALID_SOCKET) {
+            return false;
+        }
+        
+        // Connect to server.
+        iResult = connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
+        if (iResult == SOCKET_ERROR) {
+            close(ConnectSocket);
+            ConnectSocket = INVALID_SOCKET;
+            continue;
+        }
+        break;
+    }
+    
+    freeaddrinfo(result);
+    
+    if (ConnectSocket == INVALID_SOCKET) {
+        return false;
+    }
+    
+    // shutdown the connection since no more data will be sent
+    iResult = shutdown(ConnectSocket, SHUT_RDWR);
+    if (iResult == SOCKET_ERROR) {
+        close(ConnectSocket);
+        return false;
+    }
+    
+    close(ConnectSocket);
+    
+    return true;
 }

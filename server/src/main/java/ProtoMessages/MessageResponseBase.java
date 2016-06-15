@@ -47,61 +47,10 @@ public final class MessageResponseBase {
           MessageResponse, MessageResponse.Builder> implements
       // @@protoc_insertion_point(message_implements:MessageResponse)
       MessageResponseOrBuilder {
-    private MessageResponse(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry) {
+    private MessageResponse() {
       messageType_ = 0;
       messageBody_ = com.google.protobuf.Internal.bytesDefaultValue("\000");
       errorCode_ = 0;
-      com.google.protobuf.UnknownFieldSetLite.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSetLite.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              int rawValue = input.readEnum();
-              ProtoMessages.CommunicationMessageTypeBase.eCommunicationMessageType value = ProtoMessages.CommunicationMessageTypeBase.eCommunicationMessageType.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                messageType_ = rawValue;
-              }
-              break;
-            }
-            case 18: {
-              bitField0_ |= 0x00000002;
-              messageBody_ = input.readBytes();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              errorCode_ = input.readInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw new RuntimeException(e.setUnfinishedMessage(this));
-      } catch (java.io.IOException e) {
-        throw new RuntimeException(
-            new com.google.protobuf.InvalidProtocolBufferException(
-                e.getMessage()).setUnfinishedMessage(this));
-      } finally {
-        this.unknownFields = unknownFields.build();
-      }
     }
     private int bitField0_;
     public static final int MESSAGETYPE_FIELD_NUMBER = 1;
@@ -116,7 +65,7 @@ public final class MessageResponseBase {
      * <code>required .eCommunicationMessageType messageType = 1 [default = cmtNone];</code>
      */
     public ProtoMessages.CommunicationMessageTypeBase.eCommunicationMessageType getMessageType() {
-      ProtoMessages.CommunicationMessageTypeBase.eCommunicationMessageType result = ProtoMessages.CommunicationMessageTypeBase.eCommunicationMessageType.valueOf(messageType_);
+      ProtoMessages.CommunicationMessageTypeBase.eCommunicationMessageType result = ProtoMessages.CommunicationMessageTypeBase.eCommunicationMessageType.forNumber(messageType_);
       return result == null ? ProtoMessages.CommunicationMessageTypeBase.eCommunicationMessageType.cmtNone : result;
     }
     /**
@@ -234,58 +183,65 @@ public final class MessageResponseBase {
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     public static ProtoMessages.MessageResponseBase.MessageResponse parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return parser().parseFrom(data);
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
     }
     public static ProtoMessages.MessageResponseBase.MessageResponse parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return parser().parseFrom(data, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
     }
     public static ProtoMessages.MessageResponseBase.MessageResponse parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return parser().parseFrom(data);
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
     }
     public static ProtoMessages.MessageResponseBase.MessageResponse parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return parser().parseFrom(data, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
     }
     public static ProtoMessages.MessageResponseBase.MessageResponse parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return parser().parseFrom(input);
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
     }
     public static ProtoMessages.MessageResponseBase.MessageResponse parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return parser().parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
     }
     public static ProtoMessages.MessageResponseBase.MessageResponse parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return parser().parseDelimitedFrom(input);
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
     }
     public static ProtoMessages.MessageResponseBase.MessageResponse parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return parser().parseDelimitedFrom(input, extensionRegistry);
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
     }
     public static ProtoMessages.MessageResponseBase.MessageResponse parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return parser().parseFrom(input);
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
     }
     public static ProtoMessages.MessageResponseBase.MessageResponse parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return parser().parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
     }
 
     public static Builder newBuilder() {
@@ -403,15 +359,8 @@ public final class MessageResponseBase {
         com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
         Object arg0, Object arg1) {
       switch (method) {
-        case PARSE_PARTIAL_FROM: {
-          return new ProtoMessages.MessageResponseBase.MessageResponse(          (com.google.protobuf.CodedInputStream) arg0,
-              (com.google.protobuf.ExtensionRegistryLite) arg1);
-        }
-        case NEW_INSTANCE: {
-          return new ProtoMessages.MessageResponseBase.MessageResponse(
-              com.google.protobuf.Internal.EMPTY_CODED_INPUT_STREAM,
-              com.google.protobuf.ExtensionRegistryLite
-                  .getEmptyRegistry());
+        case NEW_MUTABLE_INSTANCE: {
+          return new ProtoMessages.MessageResponseBase.MessageResponse();
         }
         case IS_INITIALIZED: {
           byte isInitialized = memoizedIsInitialized;
@@ -447,20 +396,73 @@ public final class MessageResponseBase {
         case NEW_BUILDER: {
           return new Builder();
         }
-        case MERGE_FROM: {
-          if (arg0 == ProtoMessages.MessageResponseBase.MessageResponse.getDefaultInstance()) return this;
-          ProtoMessages.MessageResponseBase.MessageResponse other = (ProtoMessages.MessageResponseBase.MessageResponse) arg0;
-          if (other.hasMessageType()) {
-            setMessageType(other.getMessageType());
+        case VISIT: {
+          Visitor visitor = (Visitor) arg0;
+          ProtoMessages.MessageResponseBase.MessageResponse other = (ProtoMessages.MessageResponseBase.MessageResponse) arg1;
+          messageType_ = visitor.visitInt(hasMessageType(), messageType_,
+              other.hasMessageType(), other.messageType_);
+          messageBody_ = visitor.visitByteString(
+              hasMessageBody(), messageBody_,
+              other.hasMessageBody(), other.messageBody_);
+          errorCode_ = visitor.visitInt(
+              hasErrorCode(), errorCode_,
+              other.hasErrorCode(), other.errorCode_);
+          if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
+              .INSTANCE) {
+            bitField0_ |= other.bitField0_;
           }
-          if (other.hasMessageBody()) {
-            setMessageBody(other.getMessageBody());
-          }
-          if (other.hasErrorCode()) {
-            setErrorCode(other.getErrorCode());
-          }
-          this.mergeUnknownFields(other.unknownFields);
           return this;
+        }
+        case MERGE_FROM_STREAM: {
+          com.google.protobuf.CodedInputStream input =
+              (com.google.protobuf.CodedInputStream) arg0;
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry =
+              (com.google.protobuf.ExtensionRegistryLite) arg1;
+          try {
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                default: {
+                  if (!parseUnknownField(tag, input)) {
+                    done = true;
+                  }
+                  break;
+                }
+                case 8: {
+                  int rawValue = input.readEnum();
+                  ProtoMessages.CommunicationMessageTypeBase.eCommunicationMessageType value = ProtoMessages.CommunicationMessageTypeBase.eCommunicationMessageType.forNumber(rawValue);
+                  if (value == null) {
+                    super.mergeVarintField(1, rawValue);
+                  } else {
+                    bitField0_ |= 0x00000001;
+                    messageType_ = rawValue;
+                  }
+                  break;
+                }
+                case 18: {
+                  bitField0_ |= 0x00000002;
+                  messageBody_ = input.readBytes();
+                  break;
+                }
+                case 24: {
+                  bitField0_ |= 0x00000004;
+                  errorCode_ = input.readInt32();
+                  break;
+                }
+              }
+            }
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw new RuntimeException(e.setUnfinishedMessage(this));
+          } catch (java.io.IOException e) {
+            throw new RuntimeException(
+                new com.google.protobuf.InvalidProtocolBufferException(
+                    e.getMessage()).setUnfinishedMessage(this));
+          } finally {
+          }
         }
         case GET_DEFAULT_INSTANCE: {
           return DEFAULT_INSTANCE;
@@ -482,11 +484,8 @@ public final class MessageResponseBase {
     // @@protoc_insertion_point(class_scope:MessageResponse)
     private static final ProtoMessages.MessageResponseBase.MessageResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new MessageResponse(
-          com.google.protobuf.Internal
-              .EMPTY_CODED_INPUT_STREAM,
-          com.google.protobuf.ExtensionRegistryLite
-              .getEmptyRegistry());
+      DEFAULT_INSTANCE = new MessageResponse();
+      DEFAULT_INSTANCE.makeImmutable();
     }
 
     public static ProtoMessages.MessageResponseBase.MessageResponse getDefaultInstance() {

@@ -1,15 +1,14 @@
-apply plugin: 'java'
 apply plugin: 'scala'
 apply plugin: 'application'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 version = '1.0'
 mainClassName = 'net.orionlab.sample.MainApp'
 
 ext {
-    scalaBinaryVersion = '2.11'
-    scalaVersion = scalaBinaryVersion + '.7'
-    akkaVersion = '2.3.11'
+    scalaBinaryVersion = "2.11"
+    scalaMinorVersion = "8"
+    akkaVersion = "2.4.5"
 }
 
 repositories {
@@ -18,7 +17,45 @@ repositories {
 }
 
 dependencies {
-    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.0.0-alpha-4-pre', classifier: 'lite'
-    compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
-    compile group: 'com.typesafe.akka', name: 'akka-actor_' + scalaBinaryVersion, version: akkaVersion
+    compile group: 'com.google.protobuf', name: 'protobuf-lite', version: '3.0.0-beta-3'
+    compile("org.scala-lang:scala-library:$scalaBinaryVersion.$scalaMinorVersion")
+    compile("com.typesafe.akka:akka-actor_$scalaBinaryVersion:$akkaVersion")
 }
+
+task genProto << {
+    ext {
+        protocPath = "/usr/local/bin/protoc"
+        clientProtoDir = projectDir.path + "/../client/Classes/ProtoMessages/"
+        serverSrcDir = projectDir.path + "/src/main/java/"
+        serverProtoDir = "$serverSrcDir/ProtoMessages/"
+        protoSrcDir = projectDir.path + "/ProtoMessages"
+        cleanDirs = [clientProtoDir, serverProtoDir]
+    }
+    cleanDirs.each {
+        cleanDir ->
+            println 'Cleaning ' + cleanDir
+            delete cleanDir
+    }
+    println clientProtoDir
+    println serverProtoDir
+    if (!new File(clientProtoDir).exists()) {
+        new File(clientProtoDir).mkdirs()
+    }
+    if (!new File(serverProtoDir).exists()) {
+        new File(serverProtoDir).mkdirs()
+    }
+    FileTree protoFiles = fileTree(dir: protoSrcDir, include: '*.proto')
+    protoFiles.forEach {
+        protoFile ->
+            println 'Generating protoFile ' + protoFile
+            exec {
+                executable = protocPath
+                args = ["--cpp_out=$clientProtoDir", "--proto_path=$protoSrcDir", "$protoFile"]
+            }
+            exec {
+                executable = protocPath
+                args = ["--java_out=$serverSrcDir", "--proto_path=$protoSrcDir", "$protoFile"]
+            }
+    }
+}
+
