@@ -31,6 +31,13 @@ import net.orionlab.sample.actors._
 object MainApp extends App {
   val config = ConfigFactory.load().getConfig("SocketServer")
   val system = ActorSystem("SocketServer", config)
-  system.actorOf(SocketServerActor.props(config.getInt("ioServer.port")), "SocketServer")
+  system.actorOf(SocketServerActor.props("0.0.0.0", config.getInt("ioServer.port")), "SocketServer")
+
+  Runtime.getRuntime.addShutdownHook(new Thread {
+    override def run() {
+      MainApp.system.terminate()
+    }
+  })
+
   Await.result(system.whenTerminated, Duration.Inf)
 }

@@ -23,31 +23,46 @@
 #ifndef _ProtoMessageDelegate_h_
 #define _ProtoMessageDelegate_h_
 
-#include "MessageRequest.pb.h"
-#include "MessageResponse.pb.h"
-#include "IMessageSerializer.h"
-#include "BinarySerializer.h"
+#include "ProtoMessages/MessageRequest.pb.h"
+#include "ProtoMessages/MessageResponse.pb.h"
+#include "MessageSerializer/BaseMessageSerializer.h"
+#include "MessageSerializer/BinarySerializer.h"
 
 class ProtoMessageDelegate {
 public:
-    // simple method to enqueue proto messages
+    static const int ProtoMessageSceneID = 999;
+
+    /*
+     * This method is enqueue protobuf messages called by scheduler
+     */
     void enqueuProtoMessage() {
         auto message = _protoMessageQueue.front();
         _protoMessageQueue.pop();
-        processProtoMessage(message);
+        processProtoMessage(message.messagetype(), message.messagebody());
     }
     
-    // cocos2dx OpenGL is not thread safe, so we need to synchronize with cocos2dx thead
-    // put messages to queue and then enqueue with Scheduler
-    void onProtoMessageReceive(MessageResponse &message) {
-        _protoMessageQueue.push(message);
-        cocos2d::Director::getInstance()->getScheduler()->performFunctionInCocosThread(CC_CALLBACK_0(ProtoMessageDelegate::enqueuProtoMessage, this));
+    /*
+     * This method place all incoming messages into queue because cocos2dx OpenGL is not thread safe,
+     * so we need to care about that and synchronize with cocos2dx trhead
+     * put messages into queue and then enqueue with cocos2dx Scheduler
+     */
+    void onProtoMessageReceive(const std::string &data) {
+        try {
+            MessageResponse message = _serializer->deserialize(data);
+            _protoMessageQueue.push(message);
+            cocos2d::Director::getInstance()->getScheduler()->performFunctionInCocosThread(CC_CALLBACK_0(ProtoMessageDelegate::enqueuProtoMessage, this));
+        } catch (...) {
+        }
     }
     
-    // this method must be implemented in Every scene that uses communication with sockets
-    virtual void processProtoMessage(MessageResponse &message) = 0;
+    /*
+     * This method must be implemented in Every scene that uses communication with sockets
+     */
+    virtual void processProtoMessage(const eCommunicationMessageType messageType, const std::string &messageBody) = 0;
     
-    // this method just wrap our message to MessageRequest to send it next to server
+    /*
+     * This method just wrap our message to MessageRequest and serialize to byte array
+     */
     const std::string wrapMessage(eCommunicationMessageType msgType, google::protobuf::MessageLite &msgBody) {
         MessageRequest msg;
         msg.set_messagetype(msgType);
@@ -55,7 +70,7 @@ public:
         return _serializer->serialize(msg);
     }
 private:
-    IMessageSerializer *_serializer = new BinarySerializer();
+    BaseMessageSerializer *_serializer = new BinarySerializer();
     std::queue<MessageResponse> _protoMessageQueue;
 };
 

@@ -22,10 +22,9 @@
 
 #include "SceneSample.h"
 #include "SocketThread.h"
-#include "MessageRequestPing.pb.h"
-#include "MessageResponsePong.pb.h"
+#include "ProtoMessages/MessageRequestPing.pb.h"
+#include "ProtoMessages/MessageResponsePong.pb.h"
 
-USING_NS_CC;
 using namespace ui;
 
 Scene* SceneSample::scene() {
@@ -33,7 +32,7 @@ Scene* SceneSample::scene() {
     if(node && node->init()) {
         auto scene = Scene::create();
         scene->autorelease();
-        scene->addChild(node, 999, 999);
+        scene->addChild(node, 999, ProtoMessageDelegate::ProtoMessageSceneID);
         return scene;
     }
     CC_SAFE_DELETE(node);
@@ -45,7 +44,7 @@ bool SceneSample::init() {
         return false;
     }
     
-    auto miButton = MenuItemLabel::create(Label::createWithSystemFont("Ping", "Arial", 28), CC_CALLBACK_1(SceneSample::onMenuCallback, this));
+    auto miButton = MenuItemLabel::create(Label::createWithSystemFont("Click Me!", "Arial", 28), CC_CALLBACK_1(SceneSample::onMenuCallback, this));
     auto menu = Menu::create(miButton, nullptr);
     menu->setPosition(Vec2(100, 100));
     this->addChild(menu);
@@ -61,6 +60,8 @@ void SceneSample::onMenuCallback(cocos2d::Ref *ref) {
     this->sendPing();
 }
 
+// api calls
+
 void SceneSample::sendPing() {
     this->removeChildByTag(10);
     MessageRequestPing msg;
@@ -69,24 +70,33 @@ void SceneSample::sendPing() {
     log("send ping message to server(%d)", ret);
 }
 
-void SceneSample::processProtoMessage(MessageResponse &message) {
-    switch (message.messagetype()) {
+// api callbacks
+
+void SceneSample::processProtoMessage(const eCommunicationMessageType messageType, const std::string &messageBody) {
+    switch (messageType) {
         case eCommunicationMessageType::cmtPong: {
-            if(!message.messagebody().empty()) {
-                MessageResponsePong msg;
-                msg.ParseFromString(message.messagebody());
-                auto image = Sprite::create("Close.png");
-                image->cocos2d::Node::setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-                image->setPosition(Vec2(200, 200));
-                this->addChild(image, 10, 10);
-                log("response from server '%s'", msg.sometext().c_str());
-            } else {
-                log("Error: Received empty response body.");
-            }
+            this->callbackPong(messageBody);
             break;
         }
             
         default:
             break;
     }
+}
+
+void SceneSample::callbackPong(const std::string &data) {
+    if(data.empty()) {
+        log("Error: Received empty response body.");
+        return;
+    }
+    
+    MessageResponsePong msg;
+    msg.ParseFromString(data);
+    
+    Size size = Director::getInstance()->getVisibleSize();
+    auto lbl = Label::createWithSystemFont(msg.sometext(), "Arial", 35);
+    lbl->setPosition(Vec2(size.width/2, size.height/2));
+    this->addChild(lbl, 10, 10);
+    
+    log("response from server '%s'", msg.sometext().c_str());
 }

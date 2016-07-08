@@ -2,9 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-$(call import-add-path,$(LOCAL_PATH)/../../cocos2d)
-$(call import-add-path,$(LOCAL_PATH)/../../cocos2d/external)
-$(call import-add-path,$(LOCAL_PATH)/../../cocos2d/cocos)
+$(call import-add-path, $(LOCAL_PATH)/../../cocos2d/cocos/prebuilt-mk)
 $(call import-add-path, $(LOCAL_PATH))
 
 LOCAL_MODULE := cocos2dcpp_shared
@@ -34,7 +32,7 @@ FILE_LIST :=  $(wildcard $(LOCAL_PATH)/../../Classes/*.c*)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../Classes/*/*.c*)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/../../Classes/*/*/*.c*)
 
-LOCAL_SRC_FILES := brrcpp/main.cpp \
+LOCAL_SRC_FILES := cpp/main.cpp \
 		     $(FILE_LIST:$(LOCAL_PATH)/%=%) \
                    $(CC_LITE_SRC_FILES)
 

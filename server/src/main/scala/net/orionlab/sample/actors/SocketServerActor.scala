@@ -22,35 +22,36 @@
 
 package net.orionlab.sample.actors
 
+import akka.actor.{ActorLogging, Actor, Props}
+
 object SocketServerActor {
+  def props(host: String, port: Int) = {
+    Props(new SocketServerActor(host, port))
+  }
+}
 
-  import akka.actor.{ActorLogging, Actor, Props}
+private class SocketServerActor(host: String, port: Int) extends Actor with ActorLogging {
+
   import akka.io.{IO, Tcp}
+  import Tcp._
   import java.net.InetSocketAddress
+  import context.system
 
-  def props(port: Int) = {
-    Props(new SocketServerActor(port))
+  log.info("SocketServerActor created\nTrying to bind socket.")
+  IO(Tcp) ! Bind(self, new InetSocketAddress(host, port))
+
+  def receive = {
+    case Bound(localAddress) => log.info(s"Server listening on $localAddress")
+
+    case CommandFailed(_: Bind) => context stop self
+
+    case Connected(remote, local) =>
+      val sb = remote.getAddress.getAddress.addString(new StringBuilder(), "tcp-", "_", "x").append(remote.getPort)
+      val actorName = local.getAddress.getAddress.addString(sb, "-", "_", "x").append(local.getPort).toString()
+      val connection = sender()
+      val handler = context.actorOf(SocketClientActor.props(connection), actorName)
+      connection ! Register(handler)
+
+    case any => log.info(s">>> Unhandled message '$any'")
   }
-
-  class SocketServerActor(serverPort: Int) extends Actor with ActorLogging {
-
-    import Tcp._
-    import context.system
-
-    log.info("SocketServerActor created\nTrying to bind socket.")
-    IO(Tcp) ! Bind(self, new InetSocketAddress("0.0.0.0", serverPort))
-
-    def receive = {
-      case Bound(localAddress) => log.info(s"Server listening on $localAddress")
-      case CommandFailed(_: Bind) => context stop self
-      case Connected(remote, local) =>
-        val sb = remote.getAddress.getAddress.addString(new StringBuilder(), "tcp-", "_", "x").append(remote.getPort)
-        val actorName = local.getAddress.getAddress.addString(sb, "-", "_", "x").append(local.getPort).toString()
-        val connection = sender()
-        val handler = context.actorOf(SocketClientActor.props(connection), actorName)
-        connection ! Register(handler)
-      case any => log.info(s">>> Unhandled message '$any'")
-    }
-  }
-
 }

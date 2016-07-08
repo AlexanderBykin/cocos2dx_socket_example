@@ -8,6 +8,7 @@
 //
 
 #include <stdio.h>
+#include <sstream>
 #include "ODSocket.h"
 
 #ifdef WIN32

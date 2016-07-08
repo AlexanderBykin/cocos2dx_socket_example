@@ -20,40 +20,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package net.orionlab.sample.network
+package net.orionlab.sample.serializer
 
-import ProtoMessages.{CommunicationMessageTypeBase, MessageResponseBase}
-import com.google.protobuf.{ByteString, CodedOutputStream}
-import ProtoMessages.MessageRequestBase.MessageRequest
-import java.util.logging.Level
+object BinarySerializer extends BaseMessageSerializer {
 
-object BinarySerializer extends IMessageSerializer {
+  import ProtoMessages.MessageResponseBase.MessageResponse
+  import ProtoMessages.MessageRequestBase.MessageRequest
+  import com.google.protobuf.CodedOutputStream
 
-  override def Serialize(message: MessageResponseBase.MessageResponse): Array[Byte] = {
-    val result = new Array[Byte](message.getSerializedSize() + 4)
+  override def serialize(message: MessageResponse): Option[Array[Byte]] = {
     try {
+      val result = new Array[Byte](message.getSerializedSize + 4)
       val outStream = CodedOutputStream.newInstance(result)
-      outStream.writeFixed32NoTag(message.getSerializedSize())
+      outStream.writeFixed32NoTag(message.getSerializedSize)
       message.writeTo(outStream)
+      Some(result)
     } catch {
-      case ex: Exception => log.log(Level.SEVERE, "", ex)
+      case ex: Exception =>
+        log.error("", ex)
+        None
     }
-    result
   }
 
-  override def Deserialize(serializedMessage: Array[Byte]): Option[MessageRequest] = {
+  override def deserialize(serializedMessage: Array[Byte]): Option[MessageRequest] = {
     try {
-      if (serializedMessage == null || serializedMessage.length == 0) {
-        val builder = MessageRequest.newBuilder()
-        builder.setMessageType(CommunicationMessageTypeBase.eCommunicationMessageType.cmtNone)
-        builder.setMessageBody(ByteString.EMPTY)
-        Some(builder.build())
-      } else {
-        Some(MessageRequest.parseFrom(serializedMessage))
-      }
+      if (serializedMessage == null || serializedMessage.length == 0) None
+      else Some(MessageRequest.parseFrom(serializedMessage))
     } catch {
       case ex: Throwable =>
-        log.log(Level.SEVERE, "", ex)
+        log.error("", ex)
         None
     }
   }

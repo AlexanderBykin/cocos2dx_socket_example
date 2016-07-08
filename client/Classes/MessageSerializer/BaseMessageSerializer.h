@@ -28,10 +28,10 @@
 class MessageRequest;
 class MessageResponse;
 
-class IMessageSerializer {
+class BaseMessageSerializer {
 public:
     virtual const std::string serialize(MessageRequest &message) = 0;
-    virtual MessageResponse *deserialize(const std::string &data) = 0;
+    virtual MessageResponse deserialize(const std::string &data) = 0;
 };
 
 #endif

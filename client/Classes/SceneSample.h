@@ -26,17 +26,19 @@
 #include "cocos2d.h"
 #include "ProtoMessageDelegate.h"
 
-class SceneSample : public cocos2d::LayerColor, public ProtoMessageDelegate {
+using namespace cocos2d;
+
+class SceneSample : public LayerColor, public ProtoMessageDelegate {
 public:
-    static cocos2d::Scene* scene();
+    static Scene* scene();
     bool init();
-    void processProtoMessage(MessageResponse &message);
+    void processProtoMessage(const eCommunicationMessageType messageType, const std::string &messageBody) override;
 private:
-    void onMenuCallback(cocos2d::Ref *ref);
+    void onMenuCallback(Ref *ref);
     // api calls
     void sendPing();
     // api callbacks
-    void callbackPong(const std::string &source);
+    void callbackPong(const std::string &data);
 };
 
 #endif

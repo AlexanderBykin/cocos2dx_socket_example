@@ -22,20 +22,11 @@
 
 package net.orionlab.sample.actors
 
-import com.google.protobuf.MessageLite.Builder
+import akka.actor.{Actor, ActorLogging, ActorRef, Props, Terminated}
+import ProtoMessages.MessageRequestBase.MessageRequest
+import ProtoMessages.MessageResponseBase.MessageResponse
 
 object SocketClientActor {
-
-  import net.orionlab.sample.actors.FrameBuilderActor.{CompleteMessage, BuildFrame}
-  import akka.actor.{Props, ActorLogging, Actor, ActorRef}
-  import akka.io.Tcp
-  import ProtoMessages.MessageRequestBase.MessageRequest
-  import ProtoMessages.MessageResponseBase.MessageResponse
-  import net.orionlab.sample.network.BinarySerializer
-  import com.google.protobuf.ByteString
-  import scala.util._
-  import ProtoMessages.CommunicationMessageTypeBase.eCommunicationMessageType
-  import ProtoMessages.MessageResponsePongBase
 
   case class IncomingMessage(message: MessageRequest)
 
@@ -44,77 +35,91 @@ object SocketClientActor {
   def props(connection: ActorRef) = {
     Props(new SocketClientActor(connection))
   }
+}
 
-  class SocketClientActor(connection: ActorRef) extends Actor with ActorLogging {
+private class SocketClientActor(connection: ActorRef) extends Actor with ActorLogging {
 
-    import Tcp._
+  import akka.io.Tcp
+  import Tcp._
+  import com.google.protobuf.MessageLite.Builder
+  import net.orionlab.sample.serializer.BinarySerializer
+  import com.google.protobuf.ByteString
+  import scala.util._
+  import net.orionlab.sample.actors.SocketClientActor.IncomingMessage
+  import ProtoMessages.CommunicationMessageTypeBase.eCommunicationMessageType
+  import ProtoMessages.MessageResponsePongBase
+  import net.orionlab.sample.actors.MessageExtractorActor.{CompleteMessage, ExtractMessage}
 
-    val actorId = System.nanoTime()
-    val frameBuilder = context.actorOf(FrameBuilderActor.props(256))
-    var userActor: Option[ActorRef] = None
+  val dateFormatter = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+  val actorId = System.nanoTime()
+  val messageExtractor = context.actorOf(MessageExtractorActor.props(256))
+  var userActor = Option.empty[ActorRef]
 
-    log.info(s"ClientConnected $connection")
+  log.info(s"ClientConnected $connection")
+  context.watch(connection)
 
-    def receive = {
-      case Received(data) =>
-        log.info("received request from client")
-        frameBuilder ! BuildFrame(data.toArray)
+  def receive = {
+    case Received(data) =>
+      log.info("received request from client")
+      messageExtractor ! ExtractMessage(data.toArray)
 
-      case CompleteMessage(data) =>
-        BinarySerializer.Deserialize(data.toArray) match {
-          case None => log.info(s"Cant send empty message to UserActor.")
-          case Some(message) =>
-            self ! IncomingMessage(message)
-        }
-
-      case OutgoingMessage(message) =>
-        log.info("send response to client ")
-        connection ! Write(akka.util.ByteString(BinarySerializer.Serialize(message)))
-
-      case PeerClosed =>
-        log.info(s"ClientDisconnect $connection")
-        context.stop(self)
-
-      // handle client messages
-      case msgReceive: IncomingMessage ⇒
-        log.info("received deserialized message")
-        Try {
-          msgReceive.message.getMessageType match {
-            case eCommunicationMessageType.cmtPing =>
-              if (msgReceive.message.getMessageBody.isEmpty) {
-                log.error(s"${self.path} received empty MessageBody for MessageType='${msgReceive.message.getMessageType.name()}'")
-              } else {
-                val msgResponse = MessageResponsePongBase.MessageResponsePong.newBuilder()
-                msgResponse.setSomeText("Pong from server")
-                sendMessageEx(self, eCommunicationMessageType.cmtPong, msgResponse)
-              }
-            case any => log.error(s"Unhandled messageType($any)")
-          }
-        } match {
-          case Success(x) ⇒
-          case Failure(x) ⇒ log.error(x, "")
-        }
-
-      case any => log.info(s"Unhandled event $any")
-    }
-
-    def sendMessageEx(clientActor: ActorRef, messageType: eCommunicationMessageType, data: Option[Array[Byte]]) {
-      Option(clientActor) match {
-        case None => log.error(s"Channel can not be null in ${this}''")
-        case Some(actor) =>
-          val msgResponse = MessageResponse.newBuilder()
-          msgResponse.setMessageType(messageType)
-          msgResponse.setMessageBody(if (data.isDefined && data.get.length > 0) ByteString.copyFrom(data.get) else ByteString.EMPTY)
-          msgResponse.setErrorCode(0)
-          actor ! OutgoingMessage(msgResponse.build())
+    case CompleteMessage(data) =>
+      BinarySerializer.deserialize(data) match {
+        case None => log.warning(s"Cant send empty message to UserActor.")
+        case Some(message) =>
+          self ! IncomingMessage(message)
       }
-    }
 
-    def sendMessageEx(clientActor: ActorRef, messageType: eCommunicationMessageType, response: Builder) {
-      sendMessageEx(clientActor, messageType, if (response == null) None else Some(response.build().toByteArray))
-    }
+    case PeerClosed =>
+      log.info(s"ClientDisconnect $connection")
+      context.stop(self)
 
+    /**
+      * stop self when remote terminated
+      */
+    case msg: Terminated => context.stop(self)
+
+    /**
+      * Handle messages came from client socket
+      */
+    case msgReceive: IncomingMessage ⇒
+      log.info("received deserialized message")
+      Try {
+        msgReceive.message.getMessageType match {
+          case eCommunicationMessageType.cmtPing =>
+            if (msgReceive.message.getMessageBody.isEmpty) {
+              log.error(s"${self.path} received empty MessageBody for MessageType='${msgReceive.message.getMessageType.name()}'")
+            } else {
+              val msgResponse = MessageResponsePongBase.MessageResponsePong.newBuilder()
+              msgResponse.setSomeText("Pong from server %s".format(dateFormatter.format(new java.util.Date)))
+              sendSocketMessage(eCommunicationMessageType.cmtPong, msgResponse)
+            }
+          case any => log.warning(s"Unhandled messageType($any)")
+        }
+      } match {
+        case Success(x) ⇒
+        case Failure(x) ⇒ log.error(x, "")
+      }
+
+    case any => log.warning(s"Unhandled message <$any>")
   }
 
+  def sendSocketMessage(messageType: eCommunicationMessageType, data: Option[Array[Byte]]) {
+    Option(connection) match {
+      case None => log.error(s"Channel can not be null in '${getClass.getName}'")
+      case Some(actor) =>
+        val msgResponse = MessageResponse.newBuilder()
+        msgResponse.setMessageType(messageType)
+        msgResponse.setMessageBody(if (data.isDefined && data.get.length > 0) ByteString.copyFrom(data.get) else ByteString.EMPTY)
+        msgResponse.setErrorCode(0)
+        BinarySerializer.serialize(msgResponse.build()).foreach {
+          serializedMessage => actor ! Write(akka.util.ByteString(serializedMessage))
+        }
+    }
+  }
+
+  def sendSocketMessage(messageType: eCommunicationMessageType, builder: Builder) {
+    sendSocketMessage(messageType, if (builder == null) None else Some(builder.build().toByteArray))
+  }
 }
 

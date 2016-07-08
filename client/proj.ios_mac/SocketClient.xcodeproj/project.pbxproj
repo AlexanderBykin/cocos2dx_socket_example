@@ -153,7 +153,8 @@
 		521A8E6319F0C34300D177D7 /* Default-736h@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-736h@3x.png"; sourceTree = "<group>"; };
 		52B47A461A53D09B004E4C60 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		9890A8931B85DB2C005FEA7E /* IMessageSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IMessageSerializer.h; path = MessageSerializer/IMessageSerializer.h; sourceTree = "<group>"; };
+		986EE3381D2F85CC006C6586 /* ProtoMessageDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProtoMessageDelegate.h; sourceTree = "<group>"; };
+		986EE33A1D2F88E2006C6586 /* BaseMessageSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseMessageSerializer.h; path = MessageSerializer/BaseMessageSerializer.h; sourceTree = "<group>"; };
 		9890A89D1B85FAC2005FEA7E /* libprotobuf-lite.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libprotobuf-lite.a"; path = "../../../../../../usr/local/lib/platform/i386-sim/lib/libprotobuf-lite.a"; sourceTree = "<group>"; };
 		9890A89F1B85FB7D005FEA7E /* BinarySerializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BinarySerializer.cpp; path = MessageSerializer/BinarySerializer.cpp; sourceTree = "<group>"; };
 		9890A8A01B85FB7D005FEA7E /* BinarySerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BinarySerializer.h; path = MessageSerializer/BinarySerializer.h; sourceTree = "<group>"; };
@@ -165,7 +166,6 @@
 		98B9825F1BA1D76900C94428 /* SocketThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SocketThread.cpp; sourceTree = "<group>"; };
 		98B982601BA1D76900C94428 /* SocketThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketThread.h; sourceTree = "<group>"; };
 		98B982661BA1E1B400C94428 /* SocketResponseThreadDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SocketResponseThreadDelegate.h; sourceTree = "<group>"; };
-		98BCCB7B1BA36BDA00CF575B /* ProtoMessageDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProtoMessageDelegate.h; sourceTree = "<group>"; };
 		98BCCB7D1BA36BDA00CF575B /* CommunicationMessageType.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CommunicationMessageType.pb.cc; sourceTree = "<group>"; };
 		98BCCB7E1BA36BDA00CF575B /* CommunicationMessageType.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunicationMessageType.pb.h; sourceTree = "<group>"; };
 		98BCCB7F1BA36BDA00CF575B /* MessageRequest.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageRequest.pb.cc; sourceTree = "<group>"; };
@@ -317,7 +317,7 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				98BCCB7A1BA36BDA00CF575B /* Custom */,
+				986EE3381D2F85CC006C6586 /* ProtoMessageDelegate.h */,
 				98B9825A1BA1D76900C94428 /* Network */,
 				9890A8911B85DABE005FEA7E /* MessageSerializer */,
 				98BCCB7C1BA36BDA00CF575B /* ProtoMessages */,
@@ -380,7 +380,7 @@
 		9890A8911B85DABE005FEA7E /* MessageSerializer */ = {
 			isa = PBXGroup;
 			children = (
-				9890A8931B85DB2C005FEA7E /* IMessageSerializer.h */,
+				986EE33A1D2F88E2006C6586 /* BaseMessageSerializer.h */,
 				9890A89F1B85FB7D005FEA7E /* BinarySerializer.cpp */,
 				9890A8A01B85FB7D005FEA7E /* BinarySerializer.h */,
 			);
@@ -399,14 +399,6 @@
 				98B982601BA1D76900C94428 /* SocketThread.h */,
 			);
 			path = Network;
-			sourceTree = "<group>";
-		};
-		98BCCB7A1BA36BDA00CF575B /* Custom */ = {
-			isa = PBXGroup;
-			children = (
-				98BCCB7B1BA36BDA00CF575B /* ProtoMessageDelegate.h */,
-			);
-			path = Custom;
 			sourceTree = "<group>";
 		};
 		98BCCB7C1BA36BDA00CF575B /* ProtoMessages */ = {

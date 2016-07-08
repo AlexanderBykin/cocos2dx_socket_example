@@ -23,11 +23,11 @@
 #ifndef __BinarySerializer__
 #define __BinarySerializer__
 
-#include "IMessageSerializer.h"
+#include "BaseMessageSerializer.h"
 
-class BinarySerializer: public IMessageSerializer {
+class BinarySerializer: public BaseMessageSerializer {
     const std::string serialize(MessageRequest &message);
-    MessageResponse *deserialize(const std::string &data);
+    MessageResponse deserialize(const std::string &data);
 };
 
 #endif

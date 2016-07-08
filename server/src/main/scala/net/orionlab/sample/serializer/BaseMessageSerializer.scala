@@ -20,19 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package net.orionlab.sample.network
+package net.orionlab.sample.serializer
 
-import ProtoMessages.MessageResponseBase.MessageResponse
-import ProtoMessages.MessageRequestBase.MessageRequest
-import java.util.logging.Logger
+/**
+  * Base trait for Serialize and Deserialize of Protobuf objects
+  */
+trait BaseMessageSerializer {
 
-// Serialize and deserialize messages.
-trait IMessageSerializer {
-  protected val log = Logger.getLogger(this.getClass.getName())
+  import ProtoMessages.MessageResponseBase.MessageResponse
+  import ProtoMessages.MessageRequestBase.MessageRequest
+  import org.slf4j.LoggerFactory
 
-  // Serializer message to byte array.
-  def Serialize(message: MessageResponse): Array[Byte]
+  protected val log = LoggerFactory.getLogger(getClass.getName)
 
-  // Deserializer message from byte array.
-  def Deserialize(serializedMessage: Array[Byte]): Option[MessageRequest]
+  /**
+    * Serialize protobuf object to byte array
+    *
+    * @param message MessageResponse that need to be serialized to byte array
+    * @return Some Array[Byte] if message successful serialized else None
+    */
+  def serialize(message: MessageResponse): Option[Array[Byte]]
+
+  /**
+    * Deserialize protobuf object from byte array
+    *
+    * @param message byte array represents protobuf object
+    * @return Some MessageResponse if message successful deserialized else None
+    */
+  def deserialize(message: Array[Byte]): Option[MessageRequest]
 }

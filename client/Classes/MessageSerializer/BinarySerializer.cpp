@@ -41,16 +41,13 @@ const std::string BinarySerializer::serialize(MessageRequest &message) {
     return res;
 }
 
-MessageResponse* BinarySerializer::deserialize(const std::string &data) {
-    MessageResponse *builder;
+MessageResponse BinarySerializer::deserialize(const std::string &data) {
+    MessageResponse builder;
 
     if (sizeof(data) == 0) {
-        builder->set_messagetype(eCommunicationMessageType::cmtNone);
-        builder->set_messagebody(new char[0]);
-        
         return builder;
     }
     
-    builder->ParseFromString(data);
+    builder.ParseFromString(data);
     return builder;
 }

@@ -94,15 +94,19 @@ void AppDelegate::applicationWillEnterForeground() {
 }
 
 void AppDelegate::onSocketMessageReceive(const std::string &data) {
-    MessageResponse msg;
-    msg.ParseFromString(data);
-    
-    auto currentScene = Director::getInstance()->getRunningScene();
-    auto protoScene = dynamic_cast<ProtoMessageDelegate*>(currentScene->getChildByTag(999));
-    if(protoScene != NULL) {
-        protoScene->onProtoMessageReceive(msg);
+    if(auto currentScene = Director::getInstance()->getRunningScene()) {
+        if(auto transitionScene = dynamic_cast<TransitionScene*>(currentScene)) {
+            if(auto protoScene = dynamic_cast<ProtoMessageDelegate*>(transitionScene->getInScene()->getChildByTag(ProtoMessageDelegate::ProtoMessageSceneID))) {
+                protoScene->onProtoMessageReceive(data);
+            }
+        }
+        else if(auto protoScene = dynamic_cast<ProtoMessageDelegate*>(currentScene->getChildByTag(ProtoMessageDelegate::ProtoMessageSceneID))) {
+            protoScene->onProtoMessageReceive(data);
+        } else {
+            log("onSocketMessageReceive ProtoScene is NULL");
+        }
     } else {
-        
+        log("onSocketMessageReceive ProtoScene is NULL");
     }
 }
 
